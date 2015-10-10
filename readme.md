@@ -47,6 +47,8 @@ This game is built using the following technologies
 
 The game was initially designed with user stories and wireframing.  After wireframing the inital screen, a rapid prototype was developed to test the viablity of the wireframe layout.  It was discovered that the available screen space was not large enough to fit the wireframed design so it was modified in the prototype to make better use of the available space.
 
+Next, the necessary data was identified (data types) and actions on the data were defined (functions/methods).
+
 ---
 
 ## Get Started
