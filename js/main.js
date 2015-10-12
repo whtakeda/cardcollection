@@ -1,18 +1,18 @@
 var $board;
-var deckSize = 52;		// number of cards total (numsuits*numInSuits)
-var numSuits = 4;		// number of different suits
-var numInSuits = 13;	// number of different values in each suit
+var deckSize = 52;			// number of cards total (numsuits*numInSuits)
+var numSuits = 4;			// number of different suits
+var numInSuits = 13;		// number of different values in each suit
 var difficulty = "easy";
-var turn; // 1 or 2
-var selAry = []; // push any cards that have been selected onto this stack so you can track them to turn them back over if needed
+var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
 var game = "memory";
-var p1Score = 0;	// single game score
-var p2Score = 0;	// single game score
-var p1Total = 0;	// total wins for all games
-var p2Total = 0;	// total wins for all games
+var p1Score = 0;			// single game score
+var p2Score = 0;			// single game score
+var p1Total = 0;			// total wins for all games
+var p2Total = 0;			// total wins for all games
 var facedownClr = "#765e65";
 var faceupClr = "#ffffff";
 var facedownImg = "url(/images/tictac-minion.png)";
+var selectedClr = "#c0c0c0";// the background color for a card that is selected
 var p1Turn = true;
 var allowTies = true;		// for now this will always be true, but want to add logic to allow it to be false later
 var whackTimer;
@@ -21,16 +21,22 @@ var gameStart = 0;			// used for timed games to determine how long the player to
 var gameEnd = 0;			// used for timed games to determine how long the player took
 var gameOn = false;
 var demoMode = true;
+var deck = [];				// array for storing cards
+var board = [];				// array for modeling game board
+var player1 = "Player 1";
+var player2 = "Player 2";
+var mmAry = []				// array for storing mastermind cards that player has to try and match
 
 $board = $('#board');
 $board.on("click","div",function(evt){clickCard(this);});
 
-$('#difficulty').on("change",this,function(evt){difficulty = this.value;})
-$('#game').on("change",this,function(evt){game = this.value; switchGame();})
+$('#difficulty').on("change", this, function(evt){ difficulty = this.value; switchGame();})
+$('#game').on("change",this, function(evt){ game = this.value; switchGame(); })
+$('#guess').on("click",this, function(evt){ guessMastermind(); })
 
 
-var deck = [ ];	// array for storing cards
-var board = [];	// array for modeling game board
+
+
 
 // position is positinon in deck from 1-52
 // used is a boolean to indicate the card has been inserted into the board
@@ -58,7 +64,7 @@ function updateMessage(msg)
 
 function clearScores()
 {
-	p1Score = (p2Score =0);
+	p1Score = (p2Score = 0);
 }
 
 function flipCard(evt,dir)
@@ -68,7 +74,6 @@ function flipCard(evt,dir)
 	idx = $(evt).attr("id")-1;	// id goes from 1-52 but idx goes from 0-51
 	if (dir === "up")
 	{
-//console.log(evt)
 		$(evt).css({"background-image": board[idx].img})
 		$(evt).css({"background-color": faceupClr})
 	}
@@ -80,303 +85,18 @@ function flipCard(evt,dir)
 	return;
 }
 
-function playWhackACard()
-{
-	// use timers to randomly select and turn a card faceup
-	// possible ways to play (not going to include them all right now)
-	// 1 - most whacks in a set time limit
-	// 2 - count how long it takes to get a certain amount of whacks
-	// 3- keep going (with shorter timer each time) until person doesn't whack card in time
-
-	$('#start').on("click",this, startWhackTimer);
-}
-
-function checkWhackStatus(evt)
-{
-	var card = selAry.pop();
-	if ($(card).attr("id")=== evt.id)
-	{
-		clearTimeout(whackTimer);
-		flipCard(card,"down");
-		p1Score++;
-		updateStatus();
-		whackInterval -= 200;
-		startWhackTimer();
-	}
-	else
-	{
-		selAry.push(card);
-	}
-}
-
-function endWhack()
-{
-	var card = selAry.pop();
-
-	flipCard(card,"down");
-	updateMessage("Time's up!");
-	gameOn = false;
-}
-
-function startWhackTimer()
-{
-	var card;
-	var rnd;
-
-	selAry = [];
-
-	rnd = Math.floor((Math.random()*52));
-	card = $('#'+rnd);
-	selAry.push(card);
-	flipCard(card,"up")
-	whackTimer = setTimeout(endWhack,whackInterval);
-	gameOn = true;
-}
-
-function isWinnerRaceClock()
-{
-	var i,j;
-
-	for (i=0; i<numSuits; i++)
-	{
-		for (j=0; j<numInSuits; j++)
-		{
-			if (board[i*numInSuits+j].val-1 != j)
-			{
-				console.log("failed at position " + (i*numInSuits+j))
-				return false;
-			}
-			else if (j>0 && board[i*numInSuits+j].suit != board[i*numInSuits+j-1].suit)
-			{
-				console.log("failed at position " + (i*numInSuits+j))
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-function playRaceClock(evt)
-{
-	var card1, card2;
-	var evt1, evt2;
-	var pos1,pos2;
-	var el;
-
-	if (selAry.length == 0)
-	{
-		selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
-
-		// highlight card somehow so player can see which card is selected - change this later
-		$(evt).css("background-color","red");
-	}
-	else
-	{
-		// update the screen
-		el = selAry.pop();
-
-		card1 = el.card;
-		evt1 = el.evnt;
-
-		card2 = board[$(evt).attr("id")-1];
-		evt2 = evt;
-
-		// update card values with new boardpos
-		pos1 = card1.boardpos;
-		pos2 = card2.boardpos;
-
-		card1.boardpos = pos2;
-		card2.boardpos = pos1;
-
-		// switch card positions on board
-		board[pos1] = card2;
-		board[pos2] = card1;
-
-		// update board images with new card
-		$(evt1).css("background-image", card2.img);
-		$(evt2).css("background-image", card1.img);
-
-		$(evt1).html(card2.val)
-		$(evt2).html(card1.val)
-		$(evt1).css("background-color","#ffffff");
-		if (isWinnerRaceClock())
-		{
-			gameEnd = Date.now();
-			updateMessage("Completed in " + (gameEnd-gameStart)/1000 + " seconds")
-			gameOn = false;
-		}
-	}
-}
-
-function isWinnerMemory()
-{
-	var winner = "";
-
-	switch (difficulty)
-	{
-		case "easy":
-		case "normal":
-			if (p1Score + p2Score == 26)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1';
- 	 	 	 	}
-				else if (p2Score > p1Score)
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				else
-				{
-					winner = 'tie';
-				}
-				p1Score = (p2Score = 0);
-			}
-			return winner;
-			break;
-		case "hard":
-			if (p1Score + p2Score == 13)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1'
-				}
-				else
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				p1Score = (p2Score = 0);
-			}
-			return winner;
-			break;
-	}
-}
-
-function playMemory(evt)
-{
-	var idx;
-	var evt2;
-	var card1, card2;
-	var val;
-	var winner;
-	var condition;
-
-	// just capture the first click
-	if (selAry.length == 0)
-	{
-		// turn card faceup - change background image & color
-		flipCard(evt,"up");
-
-		selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
-	}
-	// compare second click to first click
-	else
-	{
-		// turn card faceup - change background image & color
-		flipCard(evt,"up");
-
-		// compare the two card value
-		card1 = board[$(evt).attr("id")-1];
-		val = selAry.pop();
-		evt2 = val.evnt;
-		card2 = val.card;
-
-		if (difficulty === "easy")
-		{
-			condition = (card1.val === card2.val);
-		}
-		else if (difficulty == "normal")
-		{
-			condition = (card1.val === card2.val) && (card1.clr === card2.clr);
-		}
-		else if (difficulty == "hard")
-		{
-			condition = (card1.val === card2.val);
-		}
-
-		if (condition)
-		{
-			// handle one difference between hard and normal/easy
-			if (difficulty === "hard" && selAry.length < 2)
-			{
-				selAry.push(val);
-				selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
-				return;
-			}
-
-			updateMessage('You found a match!');
-			if (p1Turn) { p1Score++; } else { p2Score++; }
-			winner = isWinnerMemory()
-			if ( winner != "" )
-			{
-				if (winner != "tie")
-				{
-					updateMessage(winner + " wins the game!");
-				}
-				else
-				{
-					updateMessage("The game is a tie");
-				}
-				gameOn = false;
-			}
-			updateStatus();
-			selAry = [];
-		}
-		else
-		{
-			updateMessage('no match');
-			setTimeout(function(){
-				flipCard(evt,"down");
-				flipCard(evt2,"down");
-				while (selAry.length>0)
-				{
-					flipCard(selAry.pop().evnt,"down");
-				}
-
-				if (p1Turn) 
-				{
-		 			updateMessage("Player 1's turn");
-				}
-				else
-				{
-		 			updateMessage("Player 2's turn");
-				}
-			},1000);
-			p1Turn = !p1Turn;
-		}
-	}
-}
-
 function clickCard(evt)
 {
 	switch (game)
 	{
 		case "memory":
-			if (!gameOn)
-			{
-				gameOn = true;
-			}
-			switch (difficulty)
-			{
-				case "easy":
-					playMemory(evt);
-					break;
-				case "normal":
-					playMemory(evt);
-					break;
-				case "hard":
-					playMemory(evt);
-					break;
-			}
+			playMemory(evt);
 			break;
 		case "whack":
 			checkWhackStatus(evt);
 			break;
 		case "raceclock":
+			// game doesn't start until first card is clicked
 			if (!gameOn)
 			{
 				gameOn = true;
@@ -385,12 +105,51 @@ function clickCard(evt)
 			playRaceClock(evt);
 			break;
 		case "mastermind":
+//			playMastermind(evt);
 			break;
 		case "cardsearch":
 			break;
 	}
 }
 
+
+// clean up the board and the game data when switching between games
+function switchGame()
+{
+	var msg = "";
+
+	switch (game)
+	{
+		case "memory":
+			dir = "down";
+			gameOn = true;
+			break;
+		case "mastermind":
+			dir = "up";
+			gameOn = true;
+			initializeMastermind();
+//			$('#start').on("click",this, playMastermind);
+			break;
+		case "raceclock":
+			msg = "Game starts by clicking any card";
+			dir = "up";
+			gameOn = false;
+			break;
+		case "cardsearch":
+			dir = "down";
+			gameOn = true;
+			break;
+		case "whack":
+			dir = "down";
+			gameOn = true;
+			$('#start').on("click",this, startWhackTimer);
+	}
+	selAry = [];
+	clearScores();
+	updateStatus();
+//	updateMessage(msg);
+	initializeBoard(dir);
+}
 function initializeDeck()
 {
 	for (var i=0; i<numSuits; i++)
@@ -440,46 +199,45 @@ function initializeDeck()
 	}
 }
 
-function switchGame()
-{
-	p1Score = 0;
-	p2Score = 0;
-	updateStatus();
+function allowDrop(ev) {
+    ev.preventDefault();
+}
 
-	switch (game)
+function drag(ev) {
+    ev.originalEvent.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+	var crd;
+console.log(ev)
+	ev.preventDefault();
+    var data = ev.originalEvent.dataTransfer.getData("text");
+console.log("!!")
+//    ev.target.appendChild(document.getElementById(data));
+
+	// space is already filled, then switch cards
+	// if space is not filled, make sure card is not already selected and disallow if it is
+	// otherwise just drop it in
+/*
+	var filled = false;
+	var evt = $('#'+data);	
+	if (filled)
 	{
-		case "memory":
-			clearScores();
-			updateMessage("");
-			updateStatus();
-			dir = "down";
-			break;
-		case "mastermind":
-			clearScores();
-			updateMessage("");
-			updateStatus();
-			dir = "down";
-			break;
-		case "raceclock":
-			clearScores();
-			updateMessage("");
-			updateStatus();
-			dir = "up";
-			break;
-		case "cardsearch":
-			clearScores();
-			updateMessage("");
-			updateStatus();
-			dir = "down";
-			break;
-		case "whack":
-			clearScores();
-			updateMessage("");
-			updateStatus();
-			dir = "down";
-			playWhackACard();
+
 	}
-	initializeBoard(dir);
+	else
+	{
+		if (playMastermind(evt))
+		{
+			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
+			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
+		}
+		else
+		{
+			alert("you already selected that card");
+		}
+	}
+*/
 }
 
 // assigns cards randomly to board and turns all cards facedown;
@@ -503,44 +261,30 @@ function initializeBoard(cardDir)
 			rnd = Math.floor((Math.random()*52));
 		}
 		ary[rnd] = true;
-//		console.log(deck[rnd])
 		deck[rnd].boardpos = i;
 		board.push(deck[rnd]);
 		flipCard($('#' + (i+1)), cardDir);
+		$('#' + (i+1)).attr("draggable","true");
+		$('#' + (i+1)).on("dragstart", this, drag);
 		if (demoMode)
 		{
 			document.getElementById(i+1).innerHTML = deck[rnd].val 	// this line for debugging only
 		}
-//		console.log(board)
-	}
-//		console.log(ary)
-/*
-	// this intializes data for a 4x13 array
-	for (i=0; i<4; i++)
-	{
-		board[i] = [];
-		for (j=0; j<13; j++)
-		{
-			board[i].push("")
-		}
-
 	}
 
-	for (i=0; i<4; i++)
-	{
-		for (j=0; j<13; j++)	
-		{
-			rnd = Math.floor((Math.random()*52));
-			while (ary[rnd].used == true)
-			{	
-				rnd = Math.floor((Math.random()*52));
-			}
-			board[i][j] = ary[rnd];
-			ary[rnd].used = true;
-//			document.getElementById((i*13+j+1).toString()).style.backgroundImage = "url(" + ary[rnd].img + ")"
-		}
-	}
-*/
+	$('#mm1').on("drop", this, drop);
+	$('#mm1').attr("greedy",true);
+	$('#mm1').on("dragover", this, allowDrop);
+
+	$('#mm2').on("drop", this, drop);
+	$('#mm2').on("dragover", this, allowDrop);
+
+	$('#mm3').on("drop", this, drop);
+	$('#mm3').on("dragover", this, allowDrop);
+
+	$('#mm4').on("drop", this, drop);
+	$('#mm4').on("dragover", this, allowDrop);
+
 }
 
 initializeDeck();
