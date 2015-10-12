@@ -56,6 +56,11 @@ function updateMessage(msg)
 	$('#messages').html(msg);
 }
 
+function clearScores()
+{
+	p1Score = (p2Score =0);
+}
+
 function flipCard(evt,dir)
 {
 	var idx;
@@ -132,33 +137,22 @@ function isWinnerRaceClock()
 {
 	var i,j;
 
-	for (i=0; i<numSuits;i++)
+	for (i=0; i<numSuits; i++)
 	{
-		// array position == card.val and suit matches suit of previous card
 		for (j=0; j<numInSuits; j++)
 		{
-			if (board[i+j].val-1 != j)
+			if (board[i*numInSuits+j].val-1 != j)
 			{
-				if (j>0 && board[j].suit != board[j-1].suit)
-				{	
-					console.log("failed at position " + (i+j))
-				}
-				else
-				{
-					return false;
-				}
+				console.log("failed at position " + (i*numInSuits+j))
+				return false;
+			}
+			else if (j>0 && board[i*numInSuits+j].suit != board[i*numInSuits+j-1].suit)
+			{
+				console.log("failed at position " + (i*numInSuits+j))
+				return false;
 			}
 		}
 	}
-/*
-	for (i=0; i<deckSize; i++)
-	{
-		if (board[i].deckpos-1 != board[i].boardpos)
-		{
-			return false;
-		}
-	}
-*/
 	return true;
 }
 
@@ -455,18 +449,33 @@ function switchGame()
 	switch (game)
 	{
 		case "memory":
+			clearScores();
+			updateMessage("");
+			updateStatus();
 			dir = "down";
 			break;
 		case "mastermind":
+			clearScores();
+			updateMessage("");
+			updateStatus();
 			dir = "down";
 			break;
 		case "raceclock":
+			clearScores();
+			updateMessage("");
+			updateStatus();
 			dir = "up";
 			break;
 		case "cardsearch":
+			clearScores();
+			updateMessage("");
+			updateStatus();
 			dir = "down";
 			break;
 		case "whack":
+			clearScores();
+			updateMessage("");
+			updateStatus();
 			dir = "down";
 			playWhackACard();
 	}
