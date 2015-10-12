@@ -13,8 +13,9 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 ## User Stories
 
 #### MVP (Ongoing)
-* As a player the game should be winnable, because the Kobayashi Maru and cat's games are no fun
+* As a player the game should be winnable, because the Kobayashi Maru is no fun
   * Well-defined goal/outcome
+  * ties are allowed
 * As a player, the game interface should be visual and interactive, because Zork is so 1980s
   * Graphical user interface
   * Use images and animation where appropriate
