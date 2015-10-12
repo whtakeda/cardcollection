@@ -12,7 +12,7 @@ body {
 	height:60px;
 	text-align:center;
 	background-color:#765e65;
-//	background-image:url('../images/tictac-minion.png');
+//	background-image:url('/images/tictac-minion.png');
 	background-size: 49px 64px;
 	background-repeat: no-repeat;
 	background-position: center;
