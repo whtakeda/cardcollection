@@ -5,12 +5,8 @@ function playMastermind(dragidx,dropidx)
 	// if card is already selected then fail
 	for (i=0; i < mmSelAry.length; i++)
 	{
-		console.log(mmSelAry[i] + " , " + dragidx)
-		console.log(i + " , " + dropidx)
 		if (mmSelAry[i] === dragidx && i != dropidx)
 		{
-//			$(evt).css("background-color", "#ffffff");
-//			selAry.splice(i,1);
 			found = true;
 			return false;
 		}
@@ -21,10 +17,7 @@ function playMastermind(dragidx,dropidx)
 	{
 		if (mmSelAry)
 		{
-//			$(evt).css("background-color", selectedClr);
-//			console.log(board[$(evt).attr("id")-1].deckpos);
-//console.log(idx)
-			mmSelAry[dropidx] = dragidx;
+			mmSelAry[dropidx] = board[dragidx];
 			return true;
 		}
 		else
@@ -42,29 +35,32 @@ function guessMastermind()
 	var i;
 	var matches = [];
 	var str = "";
+	var mm1, mm2;
 
-	for (i=0; i < selAry.length; i++)
+	for (i=0; i < mmSelAry.length; i++)
 	{
+		mm1 = mmSelAry[i];
+		mm2 = mmAry[i];
 		str += "Card " + (i+1);
-		console.log(selAry[i])
+		console.log(mmSelAry[i])
 		console.log(mmAry[i])
-		if (selAry[i].deckpos === mmAry[i].deckpos)
+		if (mm1 === mm2)
 		{
 			str += "Match";
 		}
 		else
 		{
-			if (selAry[i].suit === mmAry[i].suit)
+			if (deck[mm1].suit === deck[mm2].suit)
 			{
 				str += " suit "
 			}
 
-			if (selAry[i].clr === mmAry[i].clr && selAry[i].suit != mmAry[i].suit)
+			if (deck[mm1].clr === deck[mm2].clr && deck[mm1].suit != deck[mm2].suit)
 			{
 				str += " color "
 			}
 
-			if (selAry[i].val === mmAry[i].val)
+			if (deck[mm1].val === deck[mm2].val)
 			{
 				str += " value "
 			}
@@ -80,6 +76,7 @@ function initializeMastermind()
 	var i;
 	var found;
 
+	mmAry = [];
 	// select 4 cards at random
 	rnd = Math.floor((Math.random()*52));
 	while (mmAry.length < 4)
@@ -87,7 +84,7 @@ function initializeMastermind()
 		found = false;
 		for (i=0; i < mmAry.length; i++)
 		{
-			if (mmAry[i].deckpos-1 === rnd)
+			if (mmAry[i]-1 === rnd)
 			{
 				found = true;
 			}
@@ -95,7 +92,7 @@ function initializeMastermind()
 
 		if (!found)
 		{
-			mmAry.push(deck[rnd]);
+			mmAry.push(rnd);
 		}
 		rnd = Math.floor((Math.random()*52));
 	}
