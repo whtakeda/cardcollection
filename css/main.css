@@ -2,52 +2,50 @@ body {
 	background-color:#4f5f3f;
 }
 
+h3{
+	margin:5px 0 5px 0;
+}
+
 .div-clear {
 	clear:both;
 }
 
 .card{
 	display:inline-block;
-	width:45px;
-	height:60px;
+	width:50px;
+	height:65px;
 	text-align:center;
 	background-color:#765ef5;
-//	background-image:url('/images/tictac-minion.png');
-	background-size: 46px 64px;
+	background-size: 48px 63px;
 	background-repeat: no-repeat;
 	background-position: center;
 	margin-top:5px;
 	border-radius:2px;
-    -webkit-animation-name: example; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-    animation-name: example;
-    animation-duration: 1s;
-	animation-iteration-count:0;
-//	-moz-box-shadow: inset 4px 4px 4px rgba(255, 255, 255, .5), inset -4px -4px 4px rgba(0, 0, 0, .5);
-//    -webkit-box-shadow: inset 4px 4px 6px rgba(255, 255, 255, .5), inset -4px -4px 2px rgba(0, 0, 0, .5);
-//    box-shadow: inset 4px 4px 4px rgba(255, 255, 255, .5), inset -4px -4px 4px rgba(0, 0, 0, .5);
+/*	background-image:url('/images/tictac-minion.png');*/
 }
 
 .button{
 	border-radius:5px;
 }
 
+.container{
+	display:inline-block;
+}
+
 #sidebar{
 	position:relative;
-	display:inline-block;
-	width:250px;
+	width:180px;
 	margin:5px;
 	vertical-align: top;
 }
 
 #main{
-	display:inline-block;
-	width:650px;
+	width:700px;
 }
 
 #options{
 	display:inline-block;
-	width:240px;
+	width:170px;
 	height:200px;
 	background-color:#00c000;
 	padding:5px;
@@ -57,11 +55,19 @@ body {
 
 #status{
 	display: inline-block;
-	width:240px;
+	width:170px;
 	height:200px;
 	background-color:#0000c0;
 	padding:5px;
 	border-radius:10px;
+}
+
+#buttons{
+	bottom:10px;
+	margin-top:10px;
+	position:absolute;
+	text-align:center;
+	height:100px;
 }
 
 #title{
@@ -70,7 +76,7 @@ body {
 	background-color:orange;
 	margin-bottom:20px;
 	width:100%;
-	height:60px;
+	height:50px;
 	padding:5px;
 	border-radius:10px;
 }
@@ -82,21 +88,27 @@ body {
 
 #messages{
 	display:inline-block;
-	vertical-align:middle;
-	width:100%;
+	width:300px;
 	height:100px;
 	background-color:dodgerblue;
 	margin-top:20px;
 	padding:10px;
 	border-radius:10px;
+	vertical-align: top;
 }
 
-#buttons{
-	bottom:10px;
-	margin-top:10px;
-	position:absolute;
-	text-align:center;
+#mastermind{
+	display:inline-block;
+	width:220px;
+	height:100px;
+	background-color:dodgerblue;
+	margin-top:20px;
+	padding:10px;
+	border-radius:10px;
+	vertical-align: top;
 }
+
+
 
 /*********************************************************************************/
 

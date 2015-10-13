@@ -301,7 +301,6 @@ function initializeBoard(cardDir)
 	for (i=1; i<=4; i++)
 	{
 		$('#mm' + i).on("drop", this, drop);
-		$('#mm' + i).attr("greedy",true);
 		$('#mm' + i).on("dragover", this, allowDrop);
 	}
 }
