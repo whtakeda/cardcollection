@@ -70,10 +70,7 @@ function playRaceClock(evt)
 
 		// update board images with new card
 		$(evt1).css("background-image", card2.img);
-console.log(evt1)
-console.log(card2.img)
 		$(evt2).css("background-image", card1.img);
-console.log(evt2)
 
 		$(evt1).html(card2.val)
 		$(evt2).html(card1.val)

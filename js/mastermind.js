@@ -1,12 +1,13 @@
-function playMastermind(evt)
+function playMastermind(dragidx,dropidx)
 {
 	var i;
 	var found = false;
-console.log(selAry)
 	// if card is already selected then fail
-	for (i=0; i < selAry.length; i++)
+	for (i=0; i < mmSelAry.length; i++)
 	{
-		if (selAry[i].deckpos === board[$(evt).attr("id")-1].deckpos)
+		console.log(mmSelAry[i] + " , " + dragidx)
+		console.log(i + " , " + dropidx)
+		if (mmSelAry[i] === dragidx && i != dropidx)
 		{
 //			$(evt).css("background-color", "#ffffff");
 //			selAry.splice(i,1);
@@ -18,11 +19,12 @@ console.log(selAry)
 	// if card is not selected then add it if there are still open spots
 	if (!found)
 	{
-		if (selAry.length < 4)
+		if (mmSelAry)
 		{
 //			$(evt).css("background-color", selectedClr);
 //			console.log(board[$(evt).attr("id")-1].deckpos);
-			selAry.push(board[$(evt).attr("id")-1]);
+//console.log(idx)
+			mmSelAry[dropidx] = dragidx;
 			return true;
 		}
 		else

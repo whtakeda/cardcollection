@@ -226,6 +226,7 @@ function drag(ev) {
     ev.originalEvent.dataTransfer.setData("text", ev.target.id);
 }
 
+
 function drop(ev) {
 	var crd;
 	ev.preventDefault();
@@ -244,7 +245,7 @@ function drop(ev) {
 	}
 	else
 	{
-		if (playMastermind(evt,data))
+		if (playMastermind(evt.attr("id")-1,ev.target.id[2]-1))
 		{
 			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
 			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
@@ -289,19 +290,12 @@ function initializeBoard(cardDir)
 		}
 	}
 
-	$('#mm1').on("drop", this, drop);
-	$('#mm1').attr("greedy",true);
-	$('#mm1').on("dragover", this, allowDrop);
-
-	$('#mm2').on("drop", this, drop);
-	$('#mm2').on("dragover", this, allowDrop);
-
-	$('#mm3').on("drop", this, drop);
-	$('#mm3').on("dragover", this, allowDrop);
-
-	$('#mm4').on("drop", this, drop);
-	$('#mm4').on("dragover", this, allowDrop);
-
+	for (i=1; i<=4; i++)
+	{
+		$('#mm' + i).on("drop", this, drop);
+		$('#mm' + i).attr("greedy",true);
+		$('#mm' + i).on("dragover", this, allowDrop);
+	}
 }
 
 initializeDeck();
