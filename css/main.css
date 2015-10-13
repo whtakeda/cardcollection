@@ -11,12 +11,13 @@ body {
 	width:45px;
 	height:60px;
 	text-align:center;
-	background-color:#765e65;
+	background-color:#765ef5;
 //	background-image:url('/images/tictac-minion.png');
-	background-size: 49px 64px;
+	background-size: 46px 64px;
 	background-repeat: no-repeat;
 	background-position: center;
 	margin-top:5px;
+	border-radius:2px;
     -webkit-animation-name: example; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
     animation-name: example;
@@ -27,7 +28,12 @@ body {
 //    box-shadow: inset 4px 4px 4px rgba(255, 255, 255, .5), inset -4px -4px 4px rgba(0, 0, 0, .5);
 }
 
+.button{
+	border-radius:5px;
+}
+
 #sidebar{
+	position:relative;
 	display:inline-block;
 	width:250px;
 	margin:5px;
@@ -45,6 +51,8 @@ body {
 	height:200px;
 	background-color:#00c000;
 	padding:5px;
+	border-radius:10px;
+	margin-bottom:20px;
 }
 
 #status{
@@ -53,30 +61,41 @@ body {
 	height:200px;
 	background-color:#0000c0;
 	padding:5px;
+	border-radius:10px;
 }
 
 #title{
-	display: inline-block;
+	display:inline-block;
 	vertical-align: middle;
 	background-color:orange;
 	margin-bottom:20px;
 	width:100%;
-	height:100px;
+	height:60px;
+	padding:5px;
+	border-radius:10px;
 }
 
 #board{
-	display: inline-block;
+	display:inline-block;
 	vertical-align: middle;
 }
 
 #messages{
-	display: inline-block;
-	vertical-align: middle;
+	display:inline-block;
+	vertical-align:middle;
 	width:100%;
 	height:100px;
 	background-color:dodgerblue;
 	margin-top:20px;
 	padding:10px;
+	border-radius:10px;
+}
+
+#buttons{
+	bottom:10px;
+	margin-top:10px;
+	position:absolute;
+	text-align:center;
 }
 
 /*********************************************************************************/

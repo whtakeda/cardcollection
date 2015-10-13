@@ -2,7 +2,7 @@ function playMastermind(dragidx,dropidx)
 {
 	var i;
 	var found = false;
-	// if card is already selected then fail
+	// if card is already in array at another index, don't allow it to be added again
 	for (i=0; i < mmSelAry.length; i++)
 	{
 //console.log(mmSelAry[i] + "=" + board[dragidx])
@@ -38,6 +38,17 @@ function guessMastermind()
 	var matches = [];
 	var str = "";
 	var mm1, mm2;
+
+	// make sure there are 4 cards selected before checking
+	for (i=0; i< mmSelAry.length; i++)
+	{
+		if (mmSelAry[i] === "")
+		{
+			updateMessage("");
+			updateMessage("Please select 4 cards before guessing");
+			return;
+		}
+	}
 
 	for (i=0; i < mmSelAry.length; i++)
 	{
