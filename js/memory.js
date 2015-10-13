@@ -74,10 +74,9 @@ function playMemory(evt)
 
 		// compare the two card values
 		card1 = deck[board[idx]];
-console.log(card1)
 		idx2 = selAry.pop()
 		card2 = deck[board[idx2]];
-console.log(card2)
+
 		if (difficulty === "easy")
 		{
 			condition = (card1.val === card2.val);
@@ -101,7 +100,8 @@ console.log(card2)
 				return;
 			}
 
-			updateMessage('You found a match!');
+			rnd = Math.floor(Math.random()*5)
+			updateMessage('You found a match!<br>' + randomCompliment());
 			if (p1Turn) { p1Score++; } else { p2Score++; }
 			winner = isWinnerMemory()
 			if ( winner != "" )
@@ -121,7 +121,7 @@ console.log(card2)
 		}
 		else
 		{
-			updateMessage('no match');
+			updateMessage('No match');
 			setTimeout(function(){
 				flipCard(idx,"down");
 				flipCard(idx2,"down");
@@ -130,15 +130,8 @@ console.log(card2)
 					flipCard(selAry.pop(),"down");
 				}
 
-				if (p1Turn) 
-				{
-		 			updateMessage("Player 1's turn");
-				}
-				else
-				{
-		 			updateMessage("Player 2's turn");
-				}
-			},1000);
+				updateMessage(playerTurn())
+			},1500);
 			p1Turn = !p1Turn;
 		}
 	}

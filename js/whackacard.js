@@ -15,23 +15,6 @@ function checkWhackStatus(evt)
 	{
 		selAry.push(idx);
 	}
-
-/*	
-	var card = selAry.pop();
-	if ($(card).attr("id")=== evt.id)
-	{
-		clearTimeout(whackTimer);
-		flipCard(card,"down");
-		p1Score++;
-		updateStatus();
-		whackInterval -= 200;
-		startWhackTimer();
-	}
-	else
-	{
-		selAry.push(card);
-	}
-*/
 }
 
 function endWhack()

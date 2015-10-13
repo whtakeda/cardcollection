@@ -15,28 +15,34 @@ var facedownImg = "url(/images/tictac-minion.png)";
 var selectedClr = "#c0c0c0";// the background color for a card that is selected
 var p1Turn = true;
 var allowTies = true;		// for now this will always be true, but want to add logic to allow it to be false later
+var raceEndTime;
+var raceStartTime;
+var raceTimer;
 var whackTimer;
 var whackInterval = 5000;	// initial time to whack in milliseconds
 var gameStart = 0;			// used for timed games to determine how long the player took
 var gameEnd = 0;			// used for timed games to determine how long the player took
 var gameOn = false;
-var demoMode = true;
 var deck = [];				// array for storing cards
 var board = [];				// array for modeling game board
 var player1 = "Player 1";
 var player2 = "Player 2";
 var currPlayer = "";
+var complimentAry = ["Good job!", "You're doing great!", "Meh.", "Way to go!", "Awwww yeahhhhhhhhhh!"]
 var mmAry = [];				// array for storing mastermind cards that player has to try and match
 var mmSelAry = ["","","",""];			// array for storing player's picks for mastermind
-var mmNumTries = 0;			// number of turns a player has taken so far;
-var mmMaxTries = 10;
+//var mmNumTries = 0;			// number of turns a player has taken so far;
+//var mmMaxTries = 10;
+var mmLength = 4;			// number of cards player has to guess in mastermind
 
 $board = $('#board');
 $board.on("click","div",function(evt){clickCard(this);});
 
 $('#difficulty').on("change", this, function(evt){ difficulty = this.value; switchGame();})
-$('#game').on("change",this, function(evt){ game = this.value; switchGame(); })
-$('#guess').on("click",this, function(evt){ guessMastermind(); })
+$('#game').on("change",this, function(evt){ game = this.value; switchGame(); });
+$('#guess').on("click",this, function(evt){ guessMastermind(); });
+$('#reset').on("click", this, function(evt) { resetGame(); });
+$('#demo').on("change", this, function(evt) { demoMode(); });
 
 // position is positinon in deck from 1-52
 // used is a boolean to indicate the card has been inserted into the board
@@ -52,10 +58,38 @@ var card = function(name,suit,value,color,deckpos,direction)
 	this.direction = direction		// down or up (facedown or faceup) - currently not used.  keep here for now b/c might be using it later
 }
 
+function demoMode()
+{
+	var i;
+
+	if ($('#demo').is(":checked"))
+	{
+		for (i=0; i<deckSize; i++)
+		{
+			document.getElementById(i+1).style.color = deck[board[i]].clr;
+			document.getElementById(i+1).innerHTML = deck[board[i]].val	// this line for debugging only
+		}
+	}
+	else
+	{
+		for (i=0; i<deckSize; i++)
+		{
+			document.getElementById(i+1).innerHTML = ""
+		}
+	}
+}
+
+function randomCompliment()
+{
+	var rnd;
+
+	rnd = Math.floor(Math.random()*5);
+	return complimentAry[rnd];
+}
+
 function updateStatus()
 {
 	var str;
-	console.log(mmNumTries);
 	str = 'Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 win total: ' + p1Total + '<br>Player 2 win total: ' + p2Total + '<br>';
 	switch (game)
 	{
@@ -75,25 +109,19 @@ function clearScores()
 {
 	p1Score = (p2Score = 0);
 }
-/*
-function flipCard(evt,dir)
-{
-	var idx;
 
-	idx = $(evt).attr("id")-1;	// id goes from 1-52 but idx goes from 0-51
-	if (dir === "up")
+// return a string of whose turn it is
+function playerTurn()
+{
+	if (p1Turn)
 	{
-		$(evt).css({"background-image": board[idx].img})
-		$(evt).css({"background-color": faceupClr})
+		return "Player 1's turn"
 	}
 	else
 	{
-		$(evt).css({"background-image": facedownImg});
-		$(evt).css({"background-color": facedownClr});
+		return "Player 2's turn"
 	}
-	return;
 }
-*/
 
 function flipCard(idx,dir)
 {
@@ -101,6 +129,8 @@ function flipCard(idx,dir)
 
 	if (dir === "up")
 	{
+//		$(evt).addClass("faceup")
+//		$(evt).removeClass("facedown")
 		$(evt).css({"background-image": deck[board[idx]].img})
 		$(evt).css({"background-color": faceupClr})
 	}
@@ -108,6 +138,8 @@ function flipCard(idx,dir)
 	{
 		$(evt).css({"background-image": facedownImg});
 		$(evt).css({"background-color": facedownClr});
+//		$(evt).addClass("facedown")
+//		$(evt).removeClass("faceup")
 	}
 	return;
 }
@@ -128,6 +160,12 @@ function clickCard(evt)
 			{
 				gameOn = true;
 				gameStart = Date.now();
+ raceStartTime = new Date;
+
+raceTimer = setInterval(function() {
+	raceEndTime = new Date;
+    $('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
+}, 100);
 			}
 			playRaceClock(evt);
 			break;
@@ -139,44 +177,96 @@ function clickCard(evt)
 	}
 }
 
-
-// clean up the board and the game data when switching between games
-function switchGame()
+function resetGame()
 {
 	var msg = "";
+	var random = true;
+	var i;
+
+	clearTimeout(whackTimer);
+	clearInterval(raceTimer);
+	selAry = [];
+	mmAry = [];
+	mmSelAry.forEach(function(el,idx,ary) { ary[idx] = "" });
+	clearMMBoard();
+	clearScores();
+	updateStatus();
+	p1Turn = true;
+	$('#timer').html("");
 
 	switch (game)
 	{
 		case "memory":
 			dir = "down";
 			gameOn = true;
+			$('#start').attr("disabled", true)
+			$('#guess').attr("disabled", true)
+			switch (difficulty)
+			{
+				case "easy":
+					msg = "Select any card to start the game<br>Match any 2 cards by value to make a match<br>" + playerTurn();
+					break;
+				case "normal":
+					msg = "Select any card to start the game<br>Match any 2 cards by value and color to make a match<br>" + playerTurn();
+					break;
+				case "hard":
+					msg = "Select any card to start the game<br>Match all 4 cards by value to make a match<br>" + playerTurn();
+					break;
+			}
 			break;
 		case "mastermind":
 			dir = "up";
 			gameOn = true;
 			initializeMastermind();
-//			$('#start').on("click",this, playMastermind);
+			random = false;
+			$('#start').attr("disabled", true)
+			$('#guess').attr("disabled", false);
 			break;
 		case "raceclock":
-			msg = "Game starts by clicking any card";
+			msg = "Click any card to start game.  Arrange the cards by value and suit from left to right starting with the ace.  Click any two cards to swap their position.";
 			dir = "up";
 			gameOn = false;
+			$('#start').attr("disabled", false)
+			$('#guess').attr("disabled", true)
 			break;
 		case "cardsearch":
 			dir = "down";
 			gameOn = true;
+			$('#start').attr("disabled", true)
+			$('#guess').attr("disabled", true)
 			break;
 		case "whack":
 			dir = "down";
 			gameOn = true;
+			msg = "Click the start button to begin.  Click on cards as they turn over to score a point"
+			$('#start').attr("disabled", false)
+			$('#guess').attr("disabled", true)
+			switch (difficulty) 
+			{
+				case "easy":
+					whackInterval = 8000;
+					break;
+				case "normal":
+					whackInterval = 5000;
+					break;
+				case "hard":
+					whackInterval = 3000;
+					break;
+			}
+			$('#start').off();
 			$('#start').on("click",this, startWhackTimer);
 	}
-	selAry = [];
-	clearScores();
-	updateStatus();
-//	updateMessage(msg);
-	initializeBoard(dir);
+	updateMessage(msg);
+	initializeBoard(dir, random);
 }
+
+// clean up the board and the game data when switching between games
+function switchGame()
+{
+	// right now this is the only action to perform when switching games
+	resetGame();
+}
+
 function initializeDeck()
 {
 	for (var i=0; i<numSuits; i++)
@@ -267,7 +357,7 @@ function drop(ev) {
 }
 
 // assigns cards randomly to board and turns all cards facedown;
-function initializeBoard(cardDir)
+function initializeBoard(cardDir, random)
 {
 	var rnd;
 	var i,j;
@@ -281,10 +371,18 @@ function initializeBoard(cardDir)
 
 	for (i=0; i<deckSize; i++)
 	{
-		rnd = Math.floor((Math.random()*52));
-		while (ary[rnd] == true)
-		{	
+		// initializes the board randomly or in order
+		if (random)
+		{
 			rnd = Math.floor((Math.random()*52));
+			while (ary[rnd] == true)
+			{	
+				rnd = Math.floor((Math.random()*52));
+			}
+		}
+		else
+		{
+			rnd = i;
 		}
 		ary[rnd] = true;
 		deck[rnd].boardpos = i;
@@ -292,11 +390,10 @@ function initializeBoard(cardDir)
 		flipCard(i, cardDir);
 		$('#' + (i+1)).attr("draggable","true");
 		$('#' + (i+1)).on("dragstart", this, drag);
-		if (demoMode)
-		{
-			document.getElementById(i+1).innerHTML = deck[rnd].val 	// this line for debugging only
-		}
 	}
+	// PULL THIS LINE OUT LATER.  ONLY LEAVE IT HERE FOR DEBUGGING RIGHT NOW!!!!!!!!!!!!!!!!!!!
+	demoMode();
+	/////////////////////////////////////////////////////////////////////////////////////
 
 	for (i=1; i<=4; i++)
 	{
@@ -306,4 +403,4 @@ function initializeBoard(cardDir)
 }
 
 initializeDeck();
-initializeBoard("down");
+initializeBoard("down", true);

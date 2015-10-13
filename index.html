@@ -10,42 +10,42 @@
 
 <div id="sidebar" class="container">
 	<section id="options">
-	<h3>Options</h3>
-	Difficulty Level
-	<select id="difficulty">
-	<option value="easy">Easy</option>
-	<option value="normal">Normal</option>
-	<option value="hard">Hard</option>
-	</select><br>
+		<h3>Options</h3>
+		Difficulty Level
+		<select id="difficulty">
+		<option value="easy">Easy</option>
+		<option value="normal">Normal</option>
+		<option value="hard">Hard</option>
+		</select><br>
 
-	Choose deck design<br>
-	Change background color<br>
-	Restart game<br>
-	Instructions<br>
+		Choose deck design<br>
+		Change background color<br>
+		Instructions<br>
+		<input type="checkbox" id="demo" checked>Demo mode<br>
 
-	Select new game
-	<select id="game">
-	<option value="memory">Memory</option>
-	<option value="whack">Whack-a-card</option>
-	<option value="mastermind">Mastermind</option>
-	<option value="cardsearch">Card Search</option>
-	<option value="raceclock">Race the Clock</option>
-	</select>
+		Select new game
+		<select id="game">
+		<option value="memory">Memory</option>
+		<option value="whack">Whack-a-card</option>
+		<option value="mastermind">Mastermind</option>
+		<option value="cardsearch">Card Search</option>
+		<option value="raceclock">Race the Clock</option>
+		</select>
 	</section>
 
 	<section id="status">
 		<h3>Status</h3>
 		<section id="score">
-		Score - current game<br>
-		Score - overall<Br>
-		Whose turn is it?<br>
-		Other status info<br>
-	</section>
-
-	<section id="buttons">
-		<input type="button" class="button" id="start" value="start">
-		<input type="button" class="button" id="reset" value="reset">
-		<input type="button" class="button" id="guess" value="guess">
+			Score - current game<br>
+			Score - overall<Br>
+			Whose turn is it?<br>
+			Other status info<br>
+		</section>
+<div id="timer"></div>
+		<section id="statusbuttons">
+			<input type="button" class="button" id="start" value="start">
+			<input type="button" class="button" id="reset" value="reset">
+			<input type="button" class="button" id="guess" value="guess">
 		</section>
 	</section>
 </div>
@@ -118,10 +118,10 @@
 
 	<div class="container">
 		<section id="mastermind">
-			<div class="card" id="mm1"></div>
-			<div class="card" id="mm2"></div>
-			<div class="card" id="mm3"></div>
-			<div class="card" id="mm4"></div>
+			<div class="card mmCard" id="mm1"></div>
+			<div class="card mmCard" id="mm2"></div>
+			<div class="card mmCard" id="mm3"></div>
+			<div class="card mmCard" id="mm4"></div>
 		</section>
 		<section id="messages"></section>
 	</div>

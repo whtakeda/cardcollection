@@ -21,7 +21,12 @@ h3{
 	background-position: center;
 	margin-top:5px;
 	border-radius:2px;
+	vertical-align:top;
 /*	background-image:url('/images/tictac-minion.png');*/
+}
+
+.mmCard{
+	background-color:#000000;
 }
 
 .button{
@@ -31,9 +36,19 @@ h3{
 .container{
 	display:inline-block;
 }
+/*
+.faceup{
+	background-color:#ffffff; 
+	background-image:"";
+}
+
+.facedown{
+	background-color:#765e65;
+	background-image:url("/images/tictac-minion.png");
+}
+*/
 
 #sidebar{
-	position:relative;
 	width:180px;
 	margin:5px;
 	vertical-align: top;
@@ -54,7 +69,8 @@ h3{
 }
 
 #status{
-	display: inline-block;
+	position:relative;
+	display:inline-block;
 	width:170px;
 	height:200px;
 	background-color:#0000c0;
@@ -62,12 +78,12 @@ h3{
 	border-radius:10px;
 }
 
-#buttons{
+#statusbuttons{
+	position:absolute;
 	bottom:10px;
 	margin-top:10px;
 	position:absolute;
 	text-align:center;
-	height:100px;
 }
 
 #title{
@@ -94,6 +110,7 @@ h3{
 	margin-top:20px;
 	padding:10px;
 	border-radius:10px;
+	font-size:12px;
 	vertical-align: top;
 }
 

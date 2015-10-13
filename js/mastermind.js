@@ -38,13 +38,13 @@ function guessMastermind()
 	var matches = [];
 	var str = "";
 	var mm1, mm2;
+	var matchCnt = 0;
 
 	// make sure there are 4 cards selected before checking
 	for (i=0; i< mmSelAry.length; i++)
 	{
 		if (mmSelAry[i] === "")
 		{
-			updateMessage("");
 			updateMessage("Please select 4 cards before guessing");
 			return;
 		}
@@ -59,6 +59,7 @@ function guessMastermind()
 //		console.log(mmAry[i])
 		if (mm1 === mm2)
 		{
+			matchCnt++;
 			str += " Match";
 		}
 		else
@@ -80,14 +81,27 @@ function guessMastermind()
 		}
 		str += "<br>";
 	}
-	mmNumTries++;
-	if (mmNumTries >= mmMaxTries)
-	{
-		str = "Sorry you did not guess the correct cards<br>" + str;
-		$('#guess').attr("disabled",true)
-	}
+	(p1Turn ? p1Score++ : p2Score++)
+//	mmNumTries++;
+
+//	if (mmNumTries >= mmMaxTries)
+//	{
+//		str = "Sorry you did not guess the correct cards<br>" + str;
+//		$('#guess').attr("disabled",true)
+//	}
 	updateMessage(str);
 	updateStatus();
+}
+
+function clearMMBoard()
+{
+	var i;
+
+	for (i=1; i<=4; i++)
+	{
+		$('#mm'+i).css("backgroundImage","");
+		$('#mm'+i).css("backgroundColor", "#000000")
+	}
 }
 
 function initializeMastermind()
