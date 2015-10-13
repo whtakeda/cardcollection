@@ -48,33 +48,36 @@ function isWinnerMemory()
 
 function playMemory(evt)
 {
-	var idx;
+	
+	var idx,idx2;
 	var evt2;
 	var card1, card2;
 	var val;
 	var winner;
 	var condition;
 
+	idx = $(evt).attr("id")-1;
 	// just capture the first click
 	if (selAry.length == 0)
 	{
 		// turn card faceup - change background image & color
-		flipCard(evt,"up");
+		flipCard(idx,"up");
 
-		selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
+//		selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
+		selAry.push(idx);
 	}
 	// compare second click to first click
 	else
 	{
 		// turn card faceup - change background image & color
-		flipCard(evt,"up");
+		flipCard(idx,"up");
 
-		// compare the two card value
-		card1 = board[$(evt).attr("id")-1];
-		val = selAry.pop();
-		evt2 = val.evnt;
-		card2 = val.card;
-
+		// compare the two card values
+		card1 = deck[board[idx]];
+console.log(card1)
+		idx2 = selAry.pop()
+		card2 = deck[board[idx2]];
+console.log(card2)
 		if (difficulty === "easy")
 		{
 			condition = (card1.val === card2.val);
@@ -93,8 +96,8 @@ function playMemory(evt)
 			// handle one difference between hard and normal/easy
 			if (difficulty === "hard" && selAry.length < 2)
 			{
-				selAry.push(val);
-				selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
+				selAry.push(idx2);
+				selAry.push(idx);
 				return;
 			}
 
@@ -120,11 +123,11 @@ function playMemory(evt)
 		{
 			updateMessage('no match');
 			setTimeout(function(){
-				flipCard(evt,"down");
-				flipCard(evt2,"down");
+				flipCard(idx,"down");
+				flipCard(idx2,"down");
 				while (selAry.length>0)
 				{
-					flipCard(selAry.pop().evnt,"down");
+					flipCard(selAry.pop(),"down");
 				}
 
 				if (p1Turn) 
@@ -139,4 +142,5 @@ function playMemory(evt)
 			p1Turn = !p1Turn;
 		}
 	}
+
 }

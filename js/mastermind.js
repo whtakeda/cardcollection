@@ -14,7 +14,7 @@ console.log(selAry)
 			return false;
 		}
 	}
-alert("got here")
+
 	// if card is not selected then add it if there are still open spots
 	if (!found)
 	{

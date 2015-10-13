@@ -25,7 +25,8 @@ var deck = [];				// array for storing cards
 var board = [];				// array for modeling game board
 var player1 = "Player 1";
 var player2 = "Player 2";
-var mmAry = []				// array for storing mastermind cards that player has to try and match
+var mmAry = ["","","",""];				// array for storing mastermind cards that player has to try and match
+var mmSelAry = ["","","",""];			// array for storing player's picks for mastermind
 
 $board = $('#board');
 $board.on("click","div",function(evt){clickCard(this);});
@@ -66,7 +67,7 @@ function clearScores()
 {
 	p1Score = (p2Score = 0);
 }
-
+/*
 function flipCard(evt,dir)
 {
 	var idx;
@@ -75,6 +76,24 @@ function flipCard(evt,dir)
 	if (dir === "up")
 	{
 		$(evt).css({"background-image": board[idx].img})
+		$(evt).css({"background-color": faceupClr})
+	}
+	else
+	{
+		$(evt).css({"background-image": facedownImg});
+		$(evt).css({"background-color": facedownClr});
+	}
+	return;
+}
+*/
+
+function flipCard(idx,dir)
+{
+	var evt = "#" + (idx+1);
+
+	if (dir === "up")
+	{
+		$(evt).css({"background-image": deck[board[idx]].img})
 		$(evt).css({"background-color": faceupClr})
 	}
 	else
@@ -209,16 +228,14 @@ function drag(ev) {
 
 function drop(ev) {
 	var crd;
-console.log(ev)
 	ev.preventDefault();
     var data = ev.originalEvent.dataTransfer.getData("text");
-console.log("!!")
 //    ev.target.appendChild(document.getElementById(data));
 
 	// space is already filled, then switch cards
 	// if space is not filled, make sure card is not already selected and disallow if it is
 	// otherwise just drop it in
-/*
+
 	var filled = false;
 	var evt = $('#'+data);	
 	if (filled)
@@ -227,17 +244,17 @@ console.log("!!")
 	}
 	else
 	{
-		if (playMastermind(evt))
+		if (playMastermind(evt,data))
 		{
 			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
 			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
 		}
 		else
 		{
-			alert("you already selected that card");
+//			alert("you already selected that card");
 		}
 	}
-*/
+
 }
 
 // assigns cards randomly to board and turns all cards facedown;
@@ -262,8 +279,8 @@ function initializeBoard(cardDir)
 		}
 		ary[rnd] = true;
 		deck[rnd].boardpos = i;
-		board.push(deck[rnd]);
-		flipCard($('#' + (i+1)), cardDir);
+		board.push(rnd);
+		flipCard(i, cardDir);
 		$('#' + (i+1)).attr("draggable","true");
 		$('#' + (i+1)).on("dragstart", this, drag);
 		if (demoMode)
