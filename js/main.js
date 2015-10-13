@@ -25,8 +25,11 @@ var deck = [];				// array for storing cards
 var board = [];				// array for modeling game board
 var player1 = "Player 1";
 var player2 = "Player 2";
-var mmAry = ["","","",""];				// array for storing mastermind cards that player has to try and match
+var currPlayer = "";
+var mmAry = [];				// array for storing mastermind cards that player has to try and match
 var mmSelAry = ["","","",""];			// array for storing player's picks for mastermind
+var mmNumTries = 0;			// number of turns a player has taken so far;
+var mmMaxTries = 10;
 
 $board = $('#board');
 $board.on("click","div",function(evt){clickCard(this);});
@@ -34,10 +37,6 @@ $board.on("click","div",function(evt){clickCard(this);});
 $('#difficulty').on("change", this, function(evt){ difficulty = this.value; switchGame();})
 $('#game').on("change",this, function(evt){ game = this.value; switchGame(); })
 $('#guess').on("click",this, function(evt){ guessMastermind(); })
-
-
-
-
 
 // position is positinon in deck from 1-52
 // used is a boolean to indicate the card has been inserted into the board
@@ -55,7 +54,16 @@ var card = function(name,suit,value,color,deckpos,direction)
 
 function updateStatus()
 {
-	$('#score').html('Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 win total: ' + p1Total + '<br>Player 2 win total: ' + p2Total);
+	var str;
+	console.log(mmNumTries);
+	str = 'Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 win total: ' + p1Total + '<br>Player 2 win total: ' + p2Total + '<br>';
+	switch (game)
+	{
+		case "mastermind":
+			str += "Number of tries: " + mmNumTries;
+			break;
+	}
+	$('#score').html(str);
 }
 
 function updateMessage(msg)

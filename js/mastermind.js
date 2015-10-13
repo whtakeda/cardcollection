@@ -5,7 +5,9 @@ function playMastermind(dragidx,dropidx)
 	// if card is already selected then fail
 	for (i=0; i < mmSelAry.length; i++)
 	{
-		if (mmSelAry[i] === dragidx && i != dropidx)
+//console.log(mmSelAry[i] + "=" + board[dragidx])
+//console.log(i + "=" + dropidx)
+		if (mmSelAry[i] === board[dragidx] && i != dropidx)
 		{
 			found = true;
 			return false;
@@ -42,11 +44,11 @@ function guessMastermind()
 		mm1 = mmSelAry[i];
 		mm2 = mmAry[i];
 		str += "Card " + (i+1);
-		console.log(mmSelAry[i])
-		console.log(mmAry[i])
+//		console.log(mmSelAry[i])
+//		console.log(mmAry[i])
 		if (mm1 === mm2)
 		{
-			str += "Match";
+			str += " Match";
 		}
 		else
 		{
@@ -67,7 +69,14 @@ function guessMastermind()
 		}
 		str += "<br>";
 	}
+	mmNumTries++;
+	if (mmNumTries >= mmMaxTries)
+	{
+		str = "Sorry you did not guess the correct cards<br>" + str;
+		$('#guess').attr("disabled",true)
+	}
 	updateMessage(str);
+	updateStatus();
 }
 
 function initializeMastermind()
@@ -75,6 +84,8 @@ function initializeMastermind()
 	var rnd
 	var i;
 	var found;
+
+	mmTurns = 0;
 
 	mmAry = [];
 	// select 4 cards at random
