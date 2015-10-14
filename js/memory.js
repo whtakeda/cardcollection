@@ -22,7 +22,6 @@ function isWinnerMemory()
 				{
 					winner = 'tie';
 				}
-				p1Score = (p2Score = 0);
 			}
 			return winner;
 			break;
@@ -34,12 +33,15 @@ function isWinnerMemory()
 					p1Total++;
 					winner = 'Player 1'
 				}
-				else
+				else if (p2Score > p1Score)
 				{
 					p2Total++;
 					winner = 'Player 2';
 				}
-				p1Score = (p2Score = 0);
+				else
+				{
+					winner = "tie";
+				}
 			}
 			return winner;
 			break;
@@ -63,7 +65,9 @@ function playMemory(evt)
 		// turn card faceup - change background image & color
 		flipCard(idx,"up");
 
-//		selAry.push({"evnt":evt,"card":board[$(evt).attr("id")-1]});
+		// highlight card somehow so player can see which card is selected - change this later
+		$(evt).css("background-color",selectedClr);
+
 		selAry.push(idx);
 	}
 	// compare second click to first click
@@ -79,15 +83,15 @@ function playMemory(evt)
 
 		if (difficulty === "easy")
 		{
-			condition = (card1.val === card2.val);
+			condition = (card1.val === card2.val) && (idx != idx2);
 		}
 		else if (difficulty == "normal")
 		{
-			condition = (card1.val === card2.val) && (card1.clr === card2.clr);
+			condition = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
 		}
 		else if (difficulty == "hard")
 		{
-			condition = (card1.val === card2.val);
+			condition = (card1.val === card2.val) && (idx != idx2);
 		}
 
 		if (condition)
@@ -99,9 +103,11 @@ function playMemory(evt)
 				selAry.push(idx);
 				return;
 			}
+			$('#' + (idx2+1)).css("background-color","#ffffff");
 
 			rnd = Math.floor(Math.random()*5)
 			updateMessage('You found a match!<br>' + randomCompliment());
+
 			if (p1Turn) { p1Score++; } else { p2Score++; }
 			winner = isWinnerMemory()
 			if ( winner != "" )

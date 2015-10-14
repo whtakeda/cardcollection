@@ -9,10 +9,11 @@ var p1Score = 0;			// single game score
 var p2Score = 0;			// single game score
 var p1Total = 0;			// total wins for all games
 var p2Total = 0;			// total wins for all games
-var facedownClr = "#765e65";
+//var facedownClr = "#765e65";
+var facedownClr = "rgb(165, 221, 227)";
 var faceupClr = "#ffffff";
-var facedownImg = "url(/images/tictac-minion.png)";
-var selectedClr = "#c0c0c0";// the background color for a card that is selected
+var facedownImg;
+var selectedClr = "#fcfc00";// the background color for a card that is selected
 var p1Turn = true;
 var allowTies = true;		// for now this will always be true, but want to add logic to allow it to be false later
 var raceEndTime;
@@ -34,15 +35,22 @@ var mmSelAry = ["","","",""];			// array for storing player's picks for mastermi
 //var mmNumTries = 0;			// number of turns a player has taken so far;
 //var mmMaxTries = 10;
 var mmLength = 4;			// number of cards player has to guess in mastermind
+var cardBackAry = [ "url(/images/tictac-minion.png", "url(/images/tictac.png)", "url(/images/tictac-orange.png)","url(/images/tictac-peach.png"];
+
+facedownImg = cardBackAry[0];
 
 $board = $('#board');
-$board.on("click","div",function(evt){clickCard(this);});
-
+$('.card').on("click", this, function(evt){ clickCard(this); });
 $('#difficulty').on("change", this, function(evt){ difficulty = this.value; switchGame();})
+$('#deckdesign').on("change", this, function(evt){ facedownImg = cardBackAry[this.value]; changeDeckDesign(); })
 $('#game').on("change",this, function(evt){ game = this.value; switchGame(); });
 $('#guess').on("click",this, function(evt){ guessMastermind(); });
-$('#reset').on("click", this, function(evt) { resetGame(); });
-$('#demo').on("change", this, function(evt) { demoMode(); });
+$('#reset').on("click", this, function(evt) { resetGame(); overlay();});
+$('#demo').on("change", this, demoMode);
+$('#modalbutton').on("click", this, function (){
+	el = document.getElementById("overlay");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+});
 
 // position is positinon in deck from 1-52
 // used is a boolean to indicate the card has been inserted into the board
@@ -74,7 +82,21 @@ function demoMode()
 	{
 		for (i=0; i<deckSize; i++)
 		{
-			document.getElementById(i+1).innerHTML = ""
+			document.getElementById(i+1).innerHTML = "";
+		}
+	}
+}
+
+function changeDeckDesign()
+{
+	var i;
+
+	for (i=1; i<=deckSize; i++)
+	{
+		console.log("Here")
+		if ($('#' + i).css("background-color") === facedownClr)
+		{
+			$('#' + i).css("background-image", facedownImg);
 		}
 	}
 }
@@ -91,12 +113,6 @@ function updateStatus()
 {
 	var str;
 	str = 'Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 win total: ' + p1Total + '<br>Player 2 win total: ' + p2Total + '<br>';
-	switch (game)
-	{
-		case "mastermind":
-			str += "Number of tries: " + mmNumTries;
-			break;
-	}
 	$('#score').html(str);
 }
 
@@ -115,11 +131,11 @@ function playerTurn()
 {
 	if (p1Turn)
 	{
-		return "Player 1's turn"
+		return "Player 1's turn";
 	}
 	else
 	{
-		return "Player 2's turn"
+		return "Player 2's turn";
 	}
 }
 
@@ -160,21 +176,60 @@ function clickCard(evt)
 			{
 				gameOn = true;
 				gameStart = Date.now();
- raceStartTime = new Date;
+				raceStartTime = new Date;
 
-raceTimer = setInterval(function() {
-	raceEndTime = new Date;
-    $('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
-}, 100);
+				raceTimer = setInterval(function() {
+							raceEndTime = new Date;
+    						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
+							}, 100);
 			}
 			playRaceClock(evt);
 			break;
 		case "mastermind":
-//			playMastermind(evt);
 			break;
 		case "cardsearch":
 			break;
 	}
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.originalEvent.dataTransfer.setData("text", ev.target.id);
+}
+
+
+function drop(ev) {
+	var crd;
+	ev.preventDefault();
+    var data = ev.originalEvent.dataTransfer.getData("text");
+//    ev.target.appendChild(document.getElementById(data));
+
+	// space is already filled, then switch cards
+	// if space is not filled, make sure card is not already selected and disallow if it is
+	// otherwise just drop it in
+
+	var filled = false;
+	var evt = $('#'+data);	
+	if (filled)
+	{
+
+	}
+	else
+	{
+		if (playMastermind(evt.attr("id")-1,ev.target.id[2]-1))
+		{
+			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
+			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
+		}
+		else
+		{
+//			alert("you already selected that card");
+		}
+	}
+
 }
 
 function resetGame()
@@ -201,6 +256,7 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
+			$('#difficulty').attr("disabled",false)
 			switch (difficulty)
 			{
 				case "easy":
@@ -218,7 +274,11 @@ function resetGame()
 			dir = "up";
 			gameOn = true;
 			initializeMastermind();
+			$('#difficulty').val("normal");
+			$('#difficulty').attr("disabled",true)
+			difficulty = $('#difficulty').val();
 			random = false;
+			msg = "Drag and drop 4 cards to the boxes at the bottom then click 'Guess'.  You will be told if your card is an exact match or if it partially matches based on color, value, or suit.  To change cards, drag and drop another card on top of your existing selection."
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", false);
 			break;
@@ -226,6 +286,9 @@ function resetGame()
 			msg = "Click any card to start game.  Arrange the cards by value and suit from left to right starting with the ace.  Click any two cards to swap their position.";
 			dir = "up";
 			gameOn = false;
+			$('#difficulty').val("normal");
+			$('#difficulty').attr("disabled",true)
+			difficulty = $('#difficulty').val();
 			$('#start').attr("disabled", false)
 			$('#guess').attr("disabled", true)
 			break;
@@ -234,6 +297,7 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
+			$('#difficulty').attr("disabled",false)
 			break;
 		case "whack":
 			dir = "down";
@@ -241,6 +305,7 @@ function resetGame()
 			msg = "Click the start button to begin.  Click on cards as they turn over to score a point"
 			$('#start').attr("disabled", false)
 			$('#guess').attr("disabled", true)
+			$('#difficulty').attr("disabled",false)
 			switch (difficulty) 
 			{
 				case "easy":
@@ -316,46 +381,6 @@ function initializeDeck()
 	}
 }
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.originalEvent.dataTransfer.setData("text", ev.target.id);
-}
-
-
-function drop(ev) {
-	var crd;
-	ev.preventDefault();
-    var data = ev.originalEvent.dataTransfer.getData("text");
-//    ev.target.appendChild(document.getElementById(data));
-
-	// space is already filled, then switch cards
-	// if space is not filled, make sure card is not already selected and disallow if it is
-	// otherwise just drop it in
-
-	var filled = false;
-	var evt = $('#'+data);	
-	if (filled)
-	{
-
-	}
-	else
-	{
-		if (playMastermind(evt.attr("id")-1,ev.target.id[2]-1))
-		{
-			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
-			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
-		}
-		else
-		{
-//			alert("you already selected that card");
-		}
-	}
-
-}
-
 // assigns cards randomly to board and turns all cards facedown;
 function initializeBoard(cardDir, random)
 {
@@ -390,6 +415,7 @@ function initializeBoard(cardDir, random)
 		flipCard(i, cardDir);
 		$('#' + (i+1)).attr("draggable","true");
 		$('#' + (i+1)).on("dragstart", this, drag);
+
 	}
 	// PULL THIS LINE OUT LATER.  ONLY LEAVE IT HERE FOR DEBUGGING RIGHT NOW!!!!!!!!!!!!!!!!!!!
 	demoMode();
@@ -404,3 +430,11 @@ function initializeBoard(cardDir, random)
 
 initializeDeck();
 initializeBoard("down", true);
+
+
+
+function overlay() {
+	el = document.getElementById("overlay");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+}
+

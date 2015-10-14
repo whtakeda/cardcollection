@@ -13,25 +13,27 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 ## User Stories
 
 #### MVP (Ongoing)
-* As a player the game should be winnable, because the Kobayashi Maru is no fun
-  * Well-defined goal/outcome
-  * ties are allowed
-* As a player, the game interface should be visual and interactive, because Zork is so 1980s
-  * Graphical user interface
-  * Use images and animation where appropriate
-  * User should receive visual feedback on game state/status
-* As a player, I want the controls to be simple/easy-to-use
-  * mouse controllable
+* [ ] As a player the game should be winnable, because the Kobayashi Maru is no fun
+  * [ ] Well-defined goal/outcome
+* [ ] As a player, the game interface should be visual and interactive, because Zork is so 1980s
+  * [ ] Graphical user interface
+  * [ ] Use images and animation where appropriate
+  * [ ] User should receive visual feedback on game state/status
+* [ ] As a player, I want the controls to be simple/easy-to-use
+  * [x] mouse controllable
 
 #### MVP (Completed)
 
 #### Icebox
 
-* As a player, the game should be easy to learn, because nobody wants to read the instructions
-  * Simple rules
-  * Instructions (just in case)
-* As a player, the game should have replay value and be challenging, so I have a good way to waste my free time
-  * Multiple difficulty levels and/or multiple winning objectives, and/or multiple games
+* [ ] As a player, the game should be easy to learn, because nobody wants to read the instructions
+  * [ ] Simple rules
+  * [ ] Instructions (just in case)
+* [ ] As a player, the game should have replay value and be challenging, so I have a good way to waste my free time
+  *  [ ] Multiple difficulty levels and/or multiple winning objectives, and/or multiple games
+* [ ] As a player the game should be winnable, because the Kobayashi Maru is no fun
+  * [ ] Ties are allowed
+  * [ ] Games should be scored individually, and individual wins should be scored cumulatively so players can compete against each other
 
 ---
 

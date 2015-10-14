@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Card Collection</title>
+	<title>Card Collection Challenge</title>
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<link rel="stylesheet" type="/text/css" href="css/main.css">
 </head>
@@ -19,11 +19,17 @@
 		</select><br>
 
 		Choose deck design<br>
-		Change background color<br>
-		Instructions<br>
+		<select id="deckdesign">
+		<option value="0">Design 1</option>
+		<option value="1">Design 2</option>
+		<option value="2">Design 3</option>
+		<option value="3">Design 4</option>
+		</select><br>
+
+
 		<input type="checkbox" id="demo" checked>Demo mode<br>
 
-		Select new game
+		Select game
 		<select id="game">
 		<option value="memory">Memory</option>
 		<option value="whack">Whack-a-card</option>
@@ -52,7 +58,7 @@
 
 
 <div id="main" class="container">
-	<section id="title">Title/logo</section>
+	<section id="title"><span class="titlestyle">C</span>ard <span class="titlestyle">C</span>ollection <span class="titlestyle">C</span>hallenge</section>
 
 	<section id="board">
 		<div class="card" id="1"></div>
@@ -118,13 +124,28 @@
 
 	<div class="container">
 		<section id="mastermind">
-			<div class="card mmCard" id="mm1"></div>
-			<div class="card mmCard" id="mm2"></div>
-			<div class="card mmCard" id="mm3"></div>
-			<div class="card mmCard" id="mm4"></div>
+			<div>
+				<div class="card mmCard" id="mm1"></div>
+				<div class="card mmCard" id="mm2"></div>
+				<div class="card mmCard" id="mm3"></div>
+				<div class="card mmCard" id="mm4"></div>
+			</div>
+			<div>
+				<div class="filler">1</div>
+				<div class="filler">2</div>
+				<div class="filler">3</div>
+				<div class="filler">4</div>
+			</div>
 		</section>
 		<section id="messages"></section>
 	</div>
+</div>
+
+<div id="overlay">
+     <div>
+          <p>Content you want the user to see goes here.</p>
+          <input type="button" value="done" id="modalbutton">
+     </div>
 </div>
 
 <script src="/js/main.js"></script>	

@@ -6,7 +6,7 @@ function checkWhackStatus(evt)
 	{
 		clearTimeout(whackTimer);
 		flipCard(idx,"down");
-		p1Score++;
+		(p1Turn ? p1Score++ : p2Score++ );
 		updateStatus();
 		whackInterval -= 200;
 		startWhackTimer();
@@ -19,11 +19,37 @@ function checkWhackStatus(evt)
 
 function endWhack()
 {
+	var str;
 	var idx = selAry.pop();
 
 	flipCard(idx,"down");
 	updateMessage("Time's up!");
 	gameOn = false;
+
+	if (p1Turn)
+	{
+		str = "Player 1 has completed their turn.<br> Player 2's turn.  Click the start button to begin."
+	}
+	else
+	{
+		if (p1Score > p2Score)
+		{
+			p1Total++;
+			str = "Player 2 has completed their turn.  Player 1 is the winner";
+		}
+		else if (p2Score > p1Score)
+		{
+			p2Total++;
+			str = "Player 2 has completed their turn and has beaten Player 1";
+		}
+		else
+		{
+			str = "Player 2 has completed their turn.  The game is a tie.";
+		}
+	}
+	p1Turn = !p1Turn;
+	updateMessage(str);
+	updateStatus();
 }
 
 function startWhackTimer()

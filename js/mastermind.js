@@ -39,6 +39,7 @@ function guessMastermind()
 	var str = "";
 	var mm1, mm2;
 	var matchCnt = 0;
+	var isMatch = false;
 
 	// make sure there are 4 cards selected before checking
 	for (i=0; i< mmSelAry.length; i++)
@@ -64,31 +65,62 @@ function guessMastermind()
 		}
 		else
 		{
+			match = false;
 			if (deck[mm1].suit === deck[mm2].suit)
 			{
-				str += " suit "
+				str += " suit ";
+				isMatch = true;
 			}
 
 			if (deck[mm1].clr === deck[mm2].clr && deck[mm1].suit != deck[mm2].suit)
 			{
-				str += " color "
+				str += " color ";
+				isMatch = true;
 			}
 
 			if (deck[mm1].val === deck[mm2].val)
 			{
-				str += " value "
+				str += " value ";
+				isMatch = true;
+			}
+
+			if (!isMatch)
+			{
+				str += " does not match any attributes"
 			}
 		}
+
 		str += "<br>";
 	}
-	(p1Turn ? p1Score++ : p2Score++)
-//	mmNumTries++;
-
-//	if (mmNumTries >= mmMaxTries)
-//	{
-//		str = "Sorry you did not guess the correct cards<br>" + str;
-//		$('#guess').attr("disabled",true)
-//	}
+	(p1Turn ? p1Score++ : p2Score++);
+	if (matchCnt == 4)
+	{
+		initializeBoard("up");
+		if (p1Turn)
+		{
+			str = "Player 1 has completed their turn.<br>Player 2's turn";
+			clearMMBoard();
+			initializeMastermind();
+		}
+		else
+		{
+			if (p1Score < p2Score)
+			{
+				p1Total++;
+				str = "Player 2 has completed their turn but Player 1 is the winner!";
+			}
+			else if (p1Score > p2Score)
+			{
+				p2Total++;
+				str = "Player 2 has completed their turn and has beaten Player 1";
+			}
+			else
+			{
+				str = "Player 2 has completed their turn.  The game is a tie."
+			}
+		}
+		p1Turn = !p1Turn;
+	}
 	updateMessage(str);
 	updateStatus();
 }
@@ -120,7 +152,7 @@ function initializeMastermind()
 		found = false;
 		for (i=0; i < mmAry.length; i++)
 		{
-			if (mmAry[i]-1 === rnd)
+			if ((mmAry[i]) === rnd)
 			{
 				found = true;
 			}

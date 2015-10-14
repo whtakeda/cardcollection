@@ -62,8 +62,6 @@ function playRaceClock(evt)
 		card2.boardpos = pos1;
 
 		// switch card positions on board
-//		board[pos1] = card2;
-//		board[pos2] = card1;
 		temp = board[pos1];
 		board[pos1] = board[pos2];
 		board[pos2] = temp;
