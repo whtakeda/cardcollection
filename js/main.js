@@ -35,7 +35,7 @@ var mmSelAry = ["","","",""];			// array for storing player's picks for mastermi
 //var mmNumTries = 0;			// number of turns a player has taken so far;
 //var mmMaxTries = 10;
 var mmLength = 4;			// number of cards player has to guess in mastermind
-var cardBackAry = [ "url(/images/tictac-minion.png", "url(/images/tictac.png)", "url(/images/tictac-orange.png)","url(/images/tictac-peach.png"];
+var cardBackAry = [ "url(/images/design1.jpg", "url(/images/design5.jpg)", "url(/images/design3.jpg)","url(/images/design4.jpg"];
 
 facedownImg = cardBackAry[0];
 
@@ -85,6 +85,17 @@ function demoMode()
 			document.getElementById(i+1).innerHTML = "";
 		}
 	}
+}
+
+function myAlert(str) 
+{
+	var el;
+	var el2;
+
+	$('#myalertcontent').html(str);
+
+	el = document.getElementById("myalert");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 }
 
 function changeDeckDesign()
@@ -428,17 +439,5 @@ function initializeBoard(cardDir, random)
 
 initializeDeck();
 initializeBoard("down", true);
-
-
-function myAlert(str) 
-{
-	var el;
-	var el2;
-
-	$('#myalertcontent').html(str);
-
-	el = document.getElementById("myalert");
-	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-}
 
 
