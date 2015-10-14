@@ -49,9 +49,9 @@
 		</section>
 		<div id="timer"></div>
 		<section id="statusbuttons">
-			<input type="button" class="button" id="start" value="start">
+			<input type="button" class="button" id="start" value="start" disabled>
 			<input type="button" class="button" id="reset" value="reset">
-			<input type="button" class="button" id="guess" value="guess">
+			<input type="button" class="button" id="guess" value="guess" disabled>
 		</section>
 	</section>
 </div>
@@ -69,16 +69,17 @@
 		<div class="card" id="6"></div>
 		<div class="card" id="7"></div>
 		<div class="card" id="8"></div>
+		<div class="div-clear"></div>
 		<div class="card" id="9"></div>
 		<div class="card" id="10"></div>
 		<div class="card" id="11"></div>
 		<div class="card" id="12"></div>
 		<div class="card" id="13"></div>
-		<div class="div-clear"></div>
 
 		<div class="card" id="14"></div>
 		<div class="card" id="15"></div>
 		<div class="card" id="16"></div>
+		<div class="div-clear"></div>
 		<div class="card" id="17"></div>
 		<div class="card" id="18"></div>
 		<div class="card" id="19"></div>
@@ -87,9 +88,9 @@
 		<div class="card" id="22"></div>
 		<div class="card" id="23"></div>
 		<div class="card" id="24"></div>
+		<div class="div-clear"></div>
 		<div class="card" id="25"></div>
 		<div class="card" id="26"></div>
-		<div class="div-clear"></div>
 
 		<div class="card" id="27"></div>
 		<div class="card" id="28"></div>
@@ -97,6 +98,7 @@
 		<div class="card" id="30"></div>
 		<div class="card" id="31"></div>
 		<div class="card" id="32"></div>
+		<div class="div-clear"></div>
 		<div class="card" id="33"></div>
 		<div class="card" id="34"></div>
 		<div class="card" id="35"></div>
@@ -104,9 +106,9 @@
 		<div class="card" id="37"></div>
 		<div class="card" id="38"></div>
 		<div class="card" id="39"></div>
-		<div class="div-clear"></div>
 
 		<div class="card" id="40"></div>
+		<div class="div-clear"></div>
 		<div class="card" id="41"></div>
 		<div class="card" id="42"></div>
 		<div class="card" id="43"></div>
@@ -121,6 +123,7 @@
 		<div class="card" id="52"></div>
 		<div class="div-clear"></div>
 	</section>
+
 	<div class="container">
 		<section id="mastermind" class="bevel grad-blue">
 			<div>
@@ -136,13 +139,15 @@
 				<div class="filler">4</div>
 			</div>
 		</section>
-		<section id="messages" class="bevel grad-blue"></section>
+		<div class="filler"></div>
+		<section id="messages" class="bevel grad-blue">
+		</section>
 	</div>
 </div>
 <div id="myalert">
-     <div>
+     <div class="borderimg">
           <p id="myalertcontent"></p>
-          <input type="button" value="done" id="modalbutton">
+          <input type="button" value="ok" id="modalbutton">
      </div>
 </div>
 
@@ -151,6 +156,7 @@
 <script src="/js/whackacard.js"></script>	
 <script src="/js/mastermind.js"></script>	
 <script src="/js/racetheclock.js"></script>	
+<script src="/js/start.js"></script>	
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 var $board;
-var deckSize = 52;			// number of cards total (numsuits*numInSuits)
+var deckSize = 40;			// number of cards total (numsuits*numInSuits)
 var numSuits = 4;			// number of different suits
-var numInSuits = 13;		// number of different values in each suit
+var numInSuits = 10;		// number of different values in each suit
 var difficulty = "easy";
 var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
 var game = "memory";
@@ -41,7 +41,7 @@ facedownImg = cardBackAry[0];
 
 $board = $('#board');
 $('.card').on("click", this, function(evt){ clickCard(this); });
-$('#difficulty').on("change", this, function(evt){ difficulty = this.value; switchGame();})
+$('#difficulty').on("change", this, function(evt){ switchDifficulty(this); resetGame();})
 $('#deckdesign').on("change", this, function(evt){ facedownImg = cardBackAry[this.value]; changeDeckDesign(); })
 $('#game').on("change",this, function(evt){ game = this.value; switchGame(); });
 $('#guess').on("click",this, function(evt){ guessMastermind(); });
@@ -104,7 +104,6 @@ function changeDeckDesign()
 
 	for (i=1; i<=deckSize; i++)
 	{
-		console.log("Here")
 		if ($('#' + i).css("background-color") === facedownClr)
 		{
 			$('#' + i).css("background-image", facedownImg);
@@ -341,6 +340,27 @@ function switchGame()
 	resetGame();
 }
 
+function switchDifficulty(this1)
+{
+	difficulty = this1.value;
+	switch (difficulty)
+	{
+		case "easy":
+			numInSuits = 8;
+			deckSize = 32;
+			break;
+		case "normal":
+			numInSuits = 10;
+			deckSize = 40;
+			break;
+		case "hard":
+			numInSuits = 13;
+			deckSize = 52;
+			break;
+	}
+	redrawBoard();
+}
+
 function initializeDeck()
 {
 	for (var i=0; i<numSuits; i++)
@@ -383,8 +403,7 @@ function initializeDeck()
 					case 11: name="queen"; break;
 					case 12: name="king"; break;
 			}
-			crd = new card(name,suit,j+1,color,i*13+j+1,"down");
-//			console.log(i*13+j+1)
+			crd = new card(name,suit,j+1,color,i*numInSuits+j+1,"down");
 			deck.push(crd);
 		}
 	}
@@ -408,10 +427,10 @@ function initializeBoard(cardDir, random)
 		// initializes the board randomly or in order
 		if (random)
 		{
-			rnd = Math.floor((Math.random()*52));
+			rnd = Math.floor((Math.random()*deckSize));
 			while (ary[rnd] == true)
 			{	
-				rnd = Math.floor((Math.random()*52));
+				rnd = Math.floor((Math.random()*deckSize));
 			}
 		}
 		else
@@ -437,7 +456,21 @@ function initializeBoard(cardDir, random)
 	}
 }
 
-initializeDeck();
-initializeBoard("down", true);
+function redrawBoard()
+{
+	var i,j;
+	var str = "";
+	var cnt=1;
 
-
+	for (i=1; i<=numSuits; i++)
+	{
+		for (j=1; j<=numInSuits; j++)
+		{
+//console.log('<div class="card" id="' + (cnt) + '"></div>');
+			str += '<div class="card" id="' + (cnt++) + '"></div>';
+		}
+		str += '<div class="div-clear"></div>';
+//console.log( '<div class="div-clear"></div>');
+	}
+	$('#board').html(str);
+}

@@ -146,7 +146,7 @@ function initializeMastermind()
 
 	mmAry = [];
 	// select 4 cards at random
-	rnd = Math.floor((Math.random()*52));
+	rnd = Math.floor((Math.random()*deckSize));
 	while (mmAry.length < 4)
 	{
 		found = false;
@@ -162,7 +162,7 @@ function initializeMastermind()
 		{
 			mmAry.push(rnd);
 		}
-		rnd = Math.floor((Math.random()*52));
+		rnd = Math.floor((Math.random()*deckSize));
 	}
 	console.log(mmAry);
 }

@@ -57,6 +57,7 @@ function playMemory(evt)
 	var val;
 	var winner;
 	var condition;
+	var str;
 
 	idx = $(evt).attr("id")-1;
 	// just capture the first click
@@ -114,13 +115,14 @@ function playMemory(evt)
 			{
 				if (winner != "tie")
 				{
-					updateMessage(winner + " wins the game!");
+					str = winner + " wins the game!";
 				}
 				else
 				{
-					updateMessage("The game is a tie");
+					str = "The game is a tie";
 				}
 				gameOn = false;
+				myAlert(str);
 			}
 			updateStatus();
 			selAry = [];

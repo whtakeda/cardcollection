@@ -60,7 +60,7 @@ function startWhackTimer()
 
 	selAry = [];
 
-	rnd = Math.floor((Math.random()*52));
+	rnd = Math.floor((Math.random()*deckSize));
 	selAry.push(rnd);
 	flipCard(rnd,"up")
 	whackTimer = setTimeout(endWhack,whackInterval);
