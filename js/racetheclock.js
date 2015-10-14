@@ -70,15 +70,44 @@ function playRaceClock(evt)
 		$(evt1).css("background-image", card2.img);
 		$(evt2).css("background-image", card1.img);
 
-		$(evt1).html(card2.val)
-		$(evt2).html(card1.val)
+		$(evt1).html(card2.val);
+		$(evt2).html(card1.val);
 		$(evt1).css("background-color","#ffffff");
 		if (isWinnerRaceClock())
 		{
 			gameEnd = Date.now();
 			clearInterval(raceTimer);
-			updateMessage("Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds")
+//			updateMessage("Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds");
+			str = "Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
 			gameOn = false;
+
+			if (p1Turn)
+			{
+				p1Score = raceEndTime-raceStartTime;
+				str += "<br>Player 2's turn.";
+				initializeBoard("up",true);
+			}
+			else
+			{
+				p2Score = raceEndTime-raceStartTime;
+				if (p1Score < p2Score)
+				{
+					p1Total++;
+					str += "<br>Player 1 is the winner";
+				}
+				else if (p2Score < p1Score)
+				{
+					p2Total++;
+					str += "<br>Player 2 is the winner";
+				}
+				else
+				{
+					str += "<br>The game is a tie.";
+				}
+			}
+			updateStatus()
+			myAlert(str);
+			p1Turn = !p1Turn;
 		}
 	}
 }

@@ -45,10 +45,10 @@ $('#difficulty').on("change", this, function(evt){ difficulty = this.value; swit
 $('#deckdesign').on("change", this, function(evt){ facedownImg = cardBackAry[this.value]; changeDeckDesign(); })
 $('#game').on("change",this, function(evt){ game = this.value; switchGame(); });
 $('#guess').on("click",this, function(evt){ guessMastermind(); });
-$('#reset').on("click", this, function(evt) { resetGame(); overlay();});
+$('#reset').on("click", this, function(evt) { resetGame(); });
 $('#demo').on("change", this, demoMode);
 $('#modalbutton').on("click", this, function (){
-	el = document.getElementById("overlay");
+	el = document.getElementById("myalert");
 	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 });
 
@@ -145,8 +145,6 @@ function flipCard(idx,dir)
 
 	if (dir === "up")
 	{
-//		$(evt).addClass("faceup")
-//		$(evt).removeClass("facedown")
 		$(evt).css({"background-image": deck[board[idx]].img})
 		$(evt).css({"background-color": faceupClr})
 	}
@@ -154,8 +152,6 @@ function flipCard(idx,dir)
 	{
 		$(evt).css({"background-image": facedownImg});
 		$(evt).css({"background-color": facedownClr});
-//		$(evt).addClass("facedown")
-//		$(evt).removeClass("faceup")
 	}
 	return;
 }
@@ -197,6 +193,8 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
+
+	if (game != "mastermind") { return; }
     ev.originalEvent.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -432,9 +430,15 @@ initializeDeck();
 initializeBoard("down", true);
 
 
+function myAlert(str) 
+{
+	var el;
+	var el2;
 
-function overlay() {
-	el = document.getElementById("overlay");
+	$('#myalertcontent').html(str);
+
+	el = document.getElementById("myalert");
 	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 }
+
 

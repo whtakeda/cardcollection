@@ -28,27 +28,28 @@ function endWhack()
 
 	if (p1Turn)
 	{
-		str = "Player 1 has completed their turn.<br> Player 2's turn.  Click the start button to begin."
+		str = "Time's up.<br>Player 2's turn.<br>Click the start button to begin.";
 	}
 	else
 	{
 		if (p1Score > p2Score)
 		{
 			p1Total++;
-			str = "Player 2 has completed their turn.  Player 1 is the winner";
+			str = "Time's up.  Player 1 is the winner";
 		}
 		else if (p2Score > p1Score)
 		{
 			p2Total++;
-			str = "Player 2 has completed their turn and has beaten Player 1";
+			str = "Time's up.  Player 2 is the winner";
 		}
 		else
 		{
-			str = "Player 2 has completed their turn.  The game is a tie.";
+			str = "Time's up.  The game is a tie.";
 		}
 	}
 	p1Turn = !p1Turn;
-	updateMessage(str);
+//	updateMessage(str);
+	myAlert(str)
 	updateStatus();
 }
 

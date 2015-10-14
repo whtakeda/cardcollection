@@ -46,7 +46,7 @@ function guessMastermind()
 	{
 		if (mmSelAry[i] === "")
 		{
-			updateMessage("Please select 4 cards before guessing");
+			myAlert("Please select 4 cards before guessing");
 			return;
 		}
 	}
@@ -65,7 +65,7 @@ function guessMastermind()
 		}
 		else
 		{
-			match = false;
+			isMatch = false;
 			if (deck[mm1].suit === deck[mm2].suit)
 			{
 				str += " suit ";
@@ -121,7 +121,7 @@ function guessMastermind()
 		}
 		p1Turn = !p1Turn;
 	}
-	updateMessage(str);
+	myAlert(str);
 	updateStatus();
 }
 
