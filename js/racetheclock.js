@@ -9,7 +9,7 @@ function isWinnerRaceClock()
 			// fails if the values don't match position in row
 			if (deck[board[i*numInSuits+j]].val-1 != j)
 			{
-				console.log("value failed at position " + (i*numInSuits+j))
+//				console.log("value failed at position " + (i*numInSuits+j))
 				return false;
 			}
 			// also fails if values do match position but suits don't match

@@ -144,5 +144,5 @@ function initializeMastermind()
 		}
 		rnd = Math.floor((Math.random()*52));
 	}
-	console.log(mmAry);
+//	console.log(mmAry);
 }

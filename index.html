@@ -18,37 +18,38 @@
 			<option value="easy">Easy</option>
 			<option value="normal">Normal</option>
 			<option value="hard" selected>Hard</option>
-			</select><br>
+			</select><br />
+			<div class="spacer"></div>
 
-			Choose deck design<br>
+			Choose deck design<br />
 			<select id="deckdesign" disabled>
 			<option value="0">Default</option>
 			<option value="1">Dean</option>
 			<option value="2">Ezra</option>
 			<option value="3">Jim</option>
 			<option value="4">Phil</option>
-			</select><br>
+			</select><br />
+			<div class="spacer"></div>
 
-			<input type="checkbox" id="demo" checked>Demo mode<br>
 
-			Select game
+			Select game<br />
 			<select id="game">
 			<option value="memory">Memory</option>
 			<option value="whack">Whack-a-card</option>
 			<option value="mastermind">Mastermind</option>
 			<option value="raceclock">Race the Clock</option>
-			</select>
+			</select><br />
+			<div class="spacer"></div>
+
+			<input type="checkbox" id="demo" checked>Demo mode<br />
 		</section>
 
-		<section id="status" class="bevel grad-green">
+		<section id="status" class="bevel grad-grey">
 			<h3>Status</h3>
 			<section id="score">
-				Score - current game<br>
-				Score - overall<Br>
-				Whose turn is it?<br>
-				Other status info<br>
 			</section>
 			<div id="timer"></div>
+
 			<section id="statusbuttons">
 				<input type="button" class="button" id="start" value="start" disabled>
 				<input type="button" class="button" id="reset" value="reset">

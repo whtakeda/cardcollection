@@ -76,8 +76,8 @@ function demoMode()
 	{
 		for (i=0; i<deckSize; i++)
 		{
-			document.getElementById(i+1).style.color = deck[board[i]].clr;
-			document.getElementById(i+1).innerHTML = deck[board[i]].val	// this line for debugging only
+//			document.getElementById(i+1).style.color = deck[board[i]].clr;
+			document.getElementById(i+1).innerHTML = deck[board[i]].val	+ deck[board[i]].suit[0];
 		}
 	}
 	else
@@ -239,7 +239,6 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-//	if (game != "mastermind") { return; }
     ev.originalEvent.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -264,7 +263,9 @@ function drop(ev) {
 		}
 	}
 	else if (game === "raceclock")
-	{	
+	{
+		// disallow move if player tries to drop card onto mm card slots
+		if (ev.target.id.indexOf("mm") >= 0) { return; }
 		if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
 
 		// game doesn't start until first card is clicked
@@ -276,7 +277,7 @@ function drop(ev) {
 
 			raceTimer = setInterval(function() {
 						raceEndTime = new Date;
-   						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
+   						$('#timer').text("Elapsed time:" + ((raceEndTime - raceStartTime)/1000).toFixed(1) + "s");
 						}, 100);
 		}
 
@@ -339,12 +340,6 @@ function resetGame()
 		case "raceclock":
 			msg = "Swap any 2 cards to start game.  Arrange cards by value and suit from left to right starting with the ace.  Order of suits does not matter.";
 			dir = "up";
-			gameOn = true;
-			$('#start').attr("disabled", true)
-			$('#guess').attr("disabled", true)
-			break;
-		case "cardsearch":
-			dir = "down";
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
