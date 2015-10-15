@@ -36,7 +36,7 @@ var mmSelAry = ["","","",""];			// array for storing player's picks for mastermi
 //var mmNumTries = 0;			// number of turns a player has taken so far;
 //var mmMaxTries = 10;
 var mmLength = 4;			// number of cards player has to guess in mastermind
-var cardBackAry = [ "url(/images/pc-back3.png)", "url(/images/pc-dean.png)", "url(/images/pc-ezra.png)","url(/images/pc-jim.png)","url(/images/pc-phil.png)"];
+var cardBackAry = [ "url(/images/pc-default.png)", "url(/images/pc-dean.png)", "url(/images/pc-ezra.png)","url(/images/pc-jim.png)","url(/images/pc-phil.png)"];
 
 facedownImg = cardBackAry[0];
 
