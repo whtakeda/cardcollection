@@ -65,3 +65,8 @@ Next, the necessary data was identified (data types) and actions on the data wer
 ---
 
 ## Next Steps
+
+* Improve status/message feedback in games.
+* More detailed instructions
+* Add animation for "flipping" card over
+* add drag-and-drop support for games other than Mastermind
