@@ -1,23 +1,20 @@
 function checkWhackStatus(evt)
 {
-	var idx = selAry.pop();
+	var idx = selAry[0];
 
 	if (idx === evt.id-1)
 	{
 		clearTimeout(whackTimer);
 		flipCard(idx,"down");
+		selAry.pop();
 		(p1Turn ? p1Score++ : p2Score++ );
 		updateStatus();
 		whackInterval -= 200;
 		startWhackTimer();
 	}
-	else
-	{
-		selAry.push(idx);
-	}
 }
 
-function endWhack()
+function endWhackTurn()
 {
 	var str;
 	var idx = selAry.pop();
@@ -31,25 +28,11 @@ function endWhack()
 	}
 	else
 	{
-		if (p1Score > p2Score)
-		{
-			p1Total++;
-			str = "Time's up.  Player 1 is the winner";
-		}
-		else if (p2Score > p1Score)
-		{
-			p2Total++;
-			str = "Time's up.  Player 2 is the winner";
-		}
-		else
-		{
-			str = "Time's up.  The game is a tie.";
-		}
+		str = determineWinner("highest");
 		gameOn = false;
 	}
 	p1Turn = !p1Turn;
-//	updateMessage(str);
-	myAlert(str)
+	myAlert(str);
 	updateStatus();
 }
 
@@ -63,6 +46,6 @@ function startWhackTimer()
 	rnd = Math.floor((Math.random()*deckSize));
 	selAry.push(rnd);
 	flipCard(rnd,"up")
-	whackTimer = setTimeout(endWhack,whackInterval);
+	whackTimer = setTimeout(endWhackTurn,whackInterval);
 	gameOn = true;
 }

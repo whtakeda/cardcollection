@@ -14,30 +14,31 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 
 #### MVP (Ongoing)
 
-* [ ] As a player, the game interface should be visual and interactive, because Zork is so 1980s
-  * [x] Graphical user interface
-  * [ ] Use images and animation where appropriate
-  * [ ] User should receive visual feedback on game state/status
 
 #### MVP (Completed)
 * [x] As a player the game should be winnable, because the Kobayashi Maru is no fun
   * [x] Well-defined goal/outcome
-  * [ ] Keep score
+  * [x] Keep score
 * [x] As a player, I want the controls to be simple/easy-to-use
   * [x] mouse controllable
+  * [x] drag-and-drop for Mastermind and Race the Clock
 * [x] As a player,I want the game to have replay value
   * [x] Create multiple games - Memory, Whack-a-card, Mastermind, Race the clock
+* [ ] As a player, the game interface should be visual and interactive, because Zork is so 1980s
+  * [x] Graphical user interface
+  * [x] Use images and animation where appropriate
+  * [x] User should receive visual feedback on game state/status
+* [x] As a player the game should be winnable, because the Kobayashi Maru is no fun
+  * [x] Ties are allowed
+  * [x] Games should be scored individually, and individual wins should be scored cumulatively so players can compete against each other
+* [x] As a player, the game should have replay value and be challenging, so I have a good way to waste my free time
+  *  [x] Multiple difficulty levels and/or multiple winning objectives, and/or multiple games
+* [x] As a player, the game should be easy to learn, because nobody wants to read the instructions
+  * [x] Simple rules
+  * [x] Instructions (just in case)
 
 #### Icebox
 
-* [ ] As a player, the game should be easy to learn, because nobody wants to read the instructions
-  * [ ] Simple rules
-  * [ ] Instructions (just in case)
-* [ ] As a player, the game should have replay value and be challenging, so I have a good way to waste my free time
-  *  [ ] Multiple difficulty levels and/or multiple winning objectives, and/or multiple games
-* [ ] As a player the game should be winnable, because the Kobayashi Maru is no fun
-  * [ ] Ties are allowed
-  * [ ] Games should be scored individually, and individual wins should be scored cumulatively so players can compete against each other
 * [ ] As a player,I want the game to have replay value
   * [ ] Create multiple games - Race the Clock
 
@@ -64,4 +65,13 @@ Next, the necessary data was identified (data types) and actions on the data wer
 
 ---
 
+## Known Bugs/issues
+* GUI does not scale well.  Requires nearly a full screen to display correctly.  Basically unplayable on mobile devices
+---
+
 ## Next Steps
+
+* Improve status/message feedback in games.
+* More detailed instructions
+* Add animation for "flipping" card over
+* Add support for mobile devices

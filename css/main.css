@@ -1,6 +1,7 @@
 body {
 	background-color:#4f5f3f;
 	background-color:#756075;
+	background-color:#218D15;
 }
 
 h3{
@@ -23,8 +24,11 @@ h3{
 	background-repeat: no-repeat;
 	background-position: center;
 	margin-top:5px;
+//	margin: 4px 2px 4px 2px;
 	border-radius:3px;
 	vertical-align:top;
+    box-shadow: 5px 5px 8px black;
+	font-size:1.em;
 }
 
 .titlestyle{
@@ -34,6 +38,7 @@ h3{
 
 .mmCard{
 	background-color:#000000;
+	box-shadow:none;
 }
 
 .button{
@@ -63,12 +68,17 @@ h3{
 }
 
 .borderimg { 
-    -webkit-border-image: url('images/myAlert.png') round; /* Safari 3.1-5 */
-    -o-border-image: url('images/myAlert.png') round; /* Opera 11-12.1 */
-    border-image: url('images/myAlert.png') round;
+    -webkit-border-image: url('/images/myAlert.png') round; /* Safari 3.1-5 */
+    -o-border-image: url('/images/myAlert.png') round; /* Opera 11-12.1 */
+    border-image: url('/images/myAlert.png') round;
     border-image-slice: 10%;
     padding:20px;
     border-width:15px;
+}
+
+.spacer{
+	display:inline-block;
+	height:25px;
 }
 
 #sidebar{
@@ -96,10 +106,12 @@ h3{
 	display:inline-block;
 	width:160px;
 	height:200px;
-	background-color:#00c000;
 	padding:10px;
 	border-radius:10px;
 	margin-bottom:20px;
+	text-align:left;
+	font-size:0.9em;
+	font-family:Arial,sans-serif;
 }
 
 #status{
@@ -107,9 +119,11 @@ h3{
 	display:inline-block;
 	width:160px;
 	height:200px;
-	background-color:#0000c0;
 	padding:10px;
 	border-radius:10px;
+	text-align:left;
+	font-size:0.9em;
+	font-family:Arial,sans-serif;
 }
 
 #statusbuttons{
@@ -132,7 +146,9 @@ h3{
 	padding:5px;
 	border-radius:10px;
 	font-size:1.3em;
+	box-shadow: -8px 8px 8px black;
 }
+
 
 #board{
 	display:inline-block;
@@ -149,13 +165,14 @@ h3{
 	margin-top:20px;
 	padding:10px;
 	border-radius:10px;
-	font-size:14px;
 	vertical-align: top;
+	font-size:0.9em;
+	font-family:Arial,sans-serif;
 }
 
 #mastermind{
 	display:inline-block;
-	width:220px;
+	width:250px;
 	height:100px;
 	background-color:dodgerblue;
 	margin-top:20px;

@@ -2,6 +2,7 @@ function playMastermind(dragidx,dropidx)
 {
 	var i;
 	var found = false;
+
 	// if card is already in array at another index, don't allow it to be added again
 	for (i=0; i < mmSelAry.length; i++)
 	{
@@ -24,7 +25,7 @@ function playMastermind(dragidx,dropidx)
 
 }
 
-function guessMastermind()
+function makeGuessMM()
 {
 	// compare selAry to mmAry and return feedback to user
 	// compare value, suit, and color
@@ -89,7 +90,7 @@ function guessMastermind()
 	(p1Turn ? p1Score++ : p2Score++);
 	if (matchCnt == 4)
 	{
-		initializeBoard("up");
+		randomizeBoard("up",false);
 		if (p1Turn)
 		{
 			str = "Player 1 has completed their turn.<br>Player 2's turn";
@@ -98,20 +99,7 @@ function guessMastermind()
 		}
 		else
 		{
-			if (p1Score < p2Score)
-			{
-				p1Total++;
-				str = "Player 2 has completed their turn but Player 1 is the winner!";
-			}
-			else if (p1Score > p2Score)
-			{
-				p2Total++;
-				str = "Player 2 has completed their turn and has beaten Player 1";
-			}
-			else
-			{
-				str = "Player 2 has completed their turn.  The game is a tie."
-			}
+			str = determineWinner("lowest");
 		}
 		p1Turn = !p1Turn;
 		myAlert(str);
@@ -156,5 +144,5 @@ function initializeMastermind()
 		}
 		rnd = Math.floor((Math.random()*52));
 	}
-	console.log(mmAry);
+//	console.log(mmAry);
 }

@@ -1,87 +1,50 @@
-function isWinnerMemory()
+function isGameOverMemory()
 {
-	var winner = "";
-
 	switch (difficulty)
 	{
 		case "megaeasy":
 		case "easy":
 		case "normal":
-			if (p1Score + p2Score == deckSize/2)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1';
- 	 	 	 	}
-				else if (p2Score > p1Score)
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				else
-				{
-					winner = 'tie';
-				}
-			}
-			return winner;
+			return (p1Score + p2Score === deckSize/2) ? true : false;
 			break;
 		case "hard":
-			if (p1Score + p2Score == deckSize/numSuits)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1'
-				}
-				else if (p2Score > p1Score)
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				else
-				{
-					winner = "tie";
-				}
-			}
-			return winner;
+			return (p1Score + p2Score === deckSize/numSuits) ? true : false;
 			break;
 	}
 }
-var evt1
+
 function playMemory(evt)
 {
-	evt1 =evt;
-	var idx,idx2;
+	var idx1,idx2;
 	var evt2;
 	var card1, card2;
 	var val;
 	var winner;
-	var condition;
+	var isMatch;
 	var str;
 
 	if (deck[$(evt).attr("id")-1].direction === "up") { return; }
 
-	idx = $(evt).attr("id")-1;
+	idx1 = $(evt).attr("id")-1;
 	// just capture the first click
 	if (selAry.length == 0)
 	{
 		// turn card faceup - change background image & color
-		flipCard(idx,"up");
+		flipCard(idx1,"up");
 
 		// highlight card somehow so player can see which card is selected - change this later
 		$(evt).css("background-color",selectedClr);
 
-		selAry.push(idx);
+		selAry.push(idx1);
 	}
 	// compare second click to first click
 	else
 	{
 		// turn card faceup - change background image & color
-		flipCard(idx,"up");
+		flipCard(idx1,"up");
 
 		// compare the two card values
-		card1 = deck[board[idx]];
+		card1 = deck[board[idx1]];
 		idx2 = selAry.pop()
 		card2 = deck[board[idx2]];
 
@@ -89,23 +52,27 @@ function playMemory(evt)
 		{
 			case "megaeasy":
 			case "easy":
-				condition = (card1.val === card2.val) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (idx1 != idx2);
 				break;
 			case "normal":
-				condition = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx1 != idx2);
 				break;
 			case "hard":
-				condition = (card1.val === card2.val) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (idx1 != idx2);
 				break;
 		}
 
-		if (condition)
+		if (isMatch)
 		{
-			// handle one difference between hard and normal/easy
+			// handle one difference between hard and normal/easy since hard requires 4 cards to match
+			// there should be 2 cards on selAry already which means they've already been checked to be the same value as the current card
+			// so then we have a total of 4 matching cards (2 on the ary and the current and previous selections)
 			if (difficulty === "hard" && selAry.length < 2)
 			{
+				$('#' + (idx2+1)).css("background-color","#ffffff");
+				$('#' + (idx1+1)).css("background-color",selectedClr);
 				selAry.push(idx2);
-				selAry.push(idx);
+				selAry.push(idx1);
 				return;
 			}
 			$('#' + (idx2+1)).css("background-color","#ffffff");
@@ -114,17 +81,9 @@ function playMemory(evt)
 			updateMessage('You found a match!<br>' + randomCompliment());
 
 			if (p1Turn) { p1Score++; } else { p2Score++; }
-			winner = isWinnerMemory()
-			if ( winner != "" )
+			if ( isGameOverMemory() )
 			{
-				if (winner != "tie")
-				{
-					str = winner + " wins the game!";
-				}
-				else
-				{
-					str = "The game is a tie";
-				}
+				str = determineWinner("highest");
 				gameOn = false;
 				myAlert(str);
 			}
@@ -135,7 +94,7 @@ function playMemory(evt)
 		{
 			updateMessage('No match');
 			setTimeout(function(){
-				flipCard(idx,"down");
+				flipCard(idx1,"down");
 				flipCard(idx2,"down");
 				while (selAry.length>0)
 				{
@@ -147,5 +106,4 @@ function playMemory(evt)
 			p1Turn = !p1Turn;
 		}
 	}
-
 }
