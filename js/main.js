@@ -302,6 +302,7 @@ function resetGame()
 	clearMMBoard();
 	clearScores();
 	updateStatus();
+	raceClockStarted = false;
 	p1Turn = true;
 	$('#timer').html("");
 

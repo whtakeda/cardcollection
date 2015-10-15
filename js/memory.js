@@ -20,7 +20,7 @@ function playMemory(evt)
 	var card1, card2;
 	var val;
 	var winner;
-	var condition;
+	var isMatch;
 	var str;
 
 	if (deck[$(evt).attr("id")-1].direction === "up") { return; }
@@ -52,17 +52,17 @@ function playMemory(evt)
 		{
 			case "megaeasy":
 			case "easy":
-				condition = (card1.val === card2.val) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (idx != idx2);
 				break;
 			case "normal":
-				condition = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
 				break;
 			case "hard":
-				condition = (card1.val === card2.val) && (idx != idx2);
+				isMatch = (card1.val === card2.val) && (idx != idx2);
 				break;
 		}
 
-		if (condition)
+		if (isMatch)
 		{
 			// handle one difference between hard and normal/easy
 			if (difficulty === "hard" && selAry.length < 2)
