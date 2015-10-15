@@ -1,5 +1,5 @@
-
+initializeGame();
 initializeDeck();
 redrawBoard();
-initializeBoard("down", true);
+randomizeBoard("down", true);
 resetGame();

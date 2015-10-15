@@ -1,57 +1,20 @@
-function isWinnerMemory()
+function isGameOverMemory()
 {
-	var winner = "";
-
 	switch (difficulty)
 	{
 		case "megaeasy":
 		case "easy":
 		case "normal":
-			if (p1Score + p2Score == deckSize/2)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1';
- 	 	 	 	}
-				else if (p2Score > p1Score)
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				else
-				{
-					winner = 'tie';
-				}
-			}
-			return winner;
+			return (p1Score + p2Score === deckSize/2) ? true : false;
 			break;
 		case "hard":
-			if (p1Score + p2Score == deckSize/numSuits)
-			{
-				if (p1Score > p2Score)
-				{
-					p1Total++;
-					winner = 'Player 1'
-				}
-				else if (p2Score > p1Score)
-				{
-					p2Total++;
-					winner = 'Player 2';
-				}
-				else
-				{
-					winner = "tie";
-				}
-			}
-			return winner;
+			return (p1Score + p2Score === deckSize/numSuits) ? true : false;
 			break;
 	}
 }
-var evt1
+
 function playMemory(evt)
 {
-	evt1 =evt;
 	var idx,idx2;
 	var evt2;
 	var card1, card2;
@@ -114,17 +77,9 @@ function playMemory(evt)
 			updateMessage('You found a match!<br>' + randomCompliment());
 
 			if (p1Turn) { p1Score++; } else { p2Score++; }
-			winner = isWinnerMemory()
-			if ( winner != "" )
+			if ( isGameOverMemory() )
 			{
-				if (winner != "tie")
-				{
-					str = winner + " wins the game!";
-				}
-				else
-				{
-					str = "The game is a tie";
-				}
+				str = determineWinner("highest");
 				gameOn = false;
 				myAlert(str);
 			}

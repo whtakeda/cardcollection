@@ -1,57 +1,57 @@
-var $board;
+//var $board;
 var deckSize = 52;			// number of cards total (numsuits*numInSuits)
 var numSuits = 4;			// number of different suits
 var numInSuits = 13;		// number of different values in each suit
 var difficulty = "hard";
-var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
 var game = "memory";
 var p1Score = 0;			// single game score
 var p2Score = 0;			// single game score
 var p1Total = 0;			// total wins for all games
 var p2Total = 0;			// total wins for all games
-//var facedownClr = "#765e65";
 var facedownClr = "rgb(165, 221, 227)";
 var faceupClr = "#ffffff";
 var facedownImg;
 var selectedClr = "#ffff00";// the background color for a card that is selected
 var p1Turn = true;
 var allowTies = true;		// for now this will always be true, but want to add logic to allow it to be false later
+var gameOn = false;
+var deck = [];				// array for storing cards
+var board = [];				// array for modeling game board
+var complimentAry = ["Good job!", "You're doing great!", "Meh.", "Way to go!", "Awwww yeahhhhhhhhhh!"]
+var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
+var cardBackAry = [ "url(/images/pc-default.png)", "url(/images/pc-dean.png)", "url(/images/pc-ezra.png)","url(/images/pc-jim.png)","url(/images/pc-phil.png)"];
+
+/********* game-specific variables *********/
+
+// race the clock variables
 var raceEndTime;
 var raceStartTime;
 var raceTimer;
 var raceClockStarted = false;
+// whack-a-card variables
 var whackTimer;
 var whackInterval = 5000;	// initial time to whack in milliseconds
 var gameStart = 0;			// used for timed games to determine how long the player took
 var gameEnd = 0;			// used for timed games to determine how long the player took
-var gameOn = false;
-var ignoreDrop = false;		// see comments in drop() function
-var deck = [];				// array for storing cards
-var board = [];				// array for modeling game board
-var player1 = "Player 1";
-var player2 = "Player 2";
-var currPlayer = "";
-var complimentAry = ["Good job!", "You're doing great!", "Meh.", "Way to go!", "Awwww yeahhhhhhhhhh!"]
+
+// masterminder variables
 var mmAry = [];				// array for storing mastermind cards that player has to try and match
 var mmSelAry = ["","","",""];			// array for storing player's picks for mastermind
-//var mmNumTries = 0;			// number of turns a player has taken so far;
-//var mmMaxTries = 10;
-var mmLength = 4;			// number of cards player has to guess in mastermind
-var cardBackAry = [ "url(/images/pc-default.png)", "url(/images/pc-dean.png)", "url(/images/pc-ezra.png)","url(/images/pc-jim.png)","url(/images/pc-phil.png)"];
+
 
 facedownImg = cardBackAry[0];
 
-$board = $('#board');
+//$board = $('#board');
 $('.card').on("click", this, function(evt){ clickCard(this); });
 $('#difficulty').on("change", this, function(evt){ switchDifficulty(this); resetGame();})
 $('#deckdesign').on("change", this, function(evt){ facedownImg = cardBackAry[this.value]; changeDeckDesign(); })
 $('#game').on("change",this, function(evt){ game = this.value; switchGame(); });
-$('#guess').on("click",this, function(evt){ guessMastermind(); });
+$('#guess').on("click",this, function(evt){ makeGuessMM(); });
 $('#reset').on("click", this, function(evt) { resetGame(); });
 $('#demo').on("change", this, demoMode);
 $('#modalbutton').on("click", this, function (){
 	el = document.getElementById("myalert");
-	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	el.style.visibility = (el.style.visibility === "visible") ? "hidden" : "visible";
 });
 
 // position is positinon in deck from 1-52
@@ -133,6 +133,46 @@ function updateMessage(msg)
 	$('#messages').html(msg);
 }
 
+// assumes score is always a numeric value
+function determineWinner(condition)
+{
+	var str;
+	var score1 = parseFloat(p1Score);
+	var score2 = parseFloat(p2Score);
+
+	if (score1 === score2)
+	{
+		str = "Game over.  The game is a tie."
+	}
+	else if (condition === "highest")
+	{
+		if (score1 > score2)
+		{
+			p1Total++;
+			str = "Game over. Player 1 is the winner!";
+		}
+		else if (score1 < score2)
+		{
+			p2Total++;
+			str = "Game over.  Player 2 is the winner";
+		}
+	}
+	else
+	{
+		if (score1 < score2)
+		{
+			p1Total++;
+			str = "Game over. Player 1 is the winner!";
+		}
+		else if (score1 > score2)
+		{
+			p2Total++;
+			str = "Game over.  Player 2 is the winner";
+		}
+	}
+	return str;
+}
+
 function clearScores()
 {
 	p1Score = (p2Score = 0);
@@ -183,25 +223,13 @@ function clickCard(evt)
 			checkWhackStatus(evt);
 			break;
 		case "raceclock":
-			// if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
-			// // game doesn't start until first card is clicked
-			// if (!raceClockStarted)
-			// {
-			// 	raceClockStarted = true;
-			// 	gameStart = Date.now();
-			// 	raceStartTime = new Date;
-
-			// 	raceTimer = setInterval(function() {
-			// 				raceEndTime = new Date;
-   //  						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
-			// 				}, 100);
-			// }
-			// console.log(evt)
-			// playRaceClock(evt);
+			// do nothing for now but leave this as a placeholder for future development
 			break;
 		case "mastermind":
+			// do nothing for now but leave this as a placeholder for future development
 			break;
 		case "cardsearch":
+			// do nothing for now but leave this as a placeholder for future development
 			break;
 	}
 }
@@ -214,7 +242,7 @@ function drag(ev) {
 //	if (game != "mastermind") { return; }
     ev.originalEvent.dataTransfer.setData("text", ev.target.id);
 }
-var dropcnt=1;
+
 function drop(ev) {
 	var crd;
 	ev.preventDefault();
@@ -222,11 +250,7 @@ function drop(ev) {
 	var filled = false;
 	var evt = $('#'+data);	
 	var evt1, evt2;
-//	var temp1, evtDest;
-//    ev.target.appendChild(document.getElementById(data));
 
-//console.log(ev)
-//console.log(ev.data.target)
 	// space is already filled, then switch cards
 	// if space is not filled, make sure card is not already selected and disallow if it is
 	// otherwise just drop it in
@@ -255,19 +279,15 @@ function drop(ev) {
    						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
 						}, 100);
 		}
-console.log(dropcnt++)
-		// this drop fires twice, once for each element being exchanged.  so each pair of event fires is a single transaction and we want to ignore the second one
-		if (!ignoreDrop)
-		{
-			evtSrc = evt.attr("id")-1; 
-			evtDest = ev.target.id-1;
 
-			playRaceClock(evtSrc, evtDest);
-		}
-		ignoreDrop = !ignoreDrop;
+		evtSrc = evt.attr("id")-1; 
+		evtDest = ev.target.id-1;
+
+		playRaceClock(evtSrc, evtDest);
 	}
 }
 
+//  resets all variables back to intial values (execept totals wins for each player), i.e. to the values they had when the page was loaded
 function resetGame()
 {
 	var msg = "";
@@ -316,7 +336,7 @@ function resetGame()
 			$('#guess').attr("disabled", false);
 			break;
 		case "raceclock":
-			msg = "Click any card to start game.  Arrange the cards by value and suit from left to right starting with the ace.  Click any two cards to swap their position.";
+			msg = "Swap any 2 cards to start game.  Arrange cards by value and suit from left to right starting with the ace.  Order of suits does not matter.";
 			dir = "up";
 			gameOn = true;
 			$('#start').attr("disabled", true)
@@ -353,7 +373,7 @@ function resetGame()
 			$('#start').on("click",this, startWhackTimer);
 	}
 	updateMessage(msg);
-	initializeBoard(dir, random);
+	randomizeBoard(dir, random);
 }
 
 // clean up the board and the game data when switching between games
@@ -388,6 +408,7 @@ function switchDifficulty(this1)
 	redrawBoard();
 }
 
+// populate the deck data object with card data
 function initializeDeck()
 {
 	for (var i=0; i<numSuits; i++)
@@ -437,7 +458,9 @@ function initializeDeck()
 }
 
 // assigns cards randomly to board and turns all cards facedown;
-function initializeBoard(cardDir, random)
+// board stores the card index only, not the actual card
+// this is called every time the values on the board need to be randomized again
+function randomizeBoard(cardDir, random)
 {
 	var rnd;
 	var i,j;
@@ -479,18 +502,10 @@ function initializeBoard(cardDir, random)
 	// PULL THIS LINE OUT LATER.  ONLY LEAVE IT HERE FOR DEBUGGING RIGHT NOW!!!!!!!!!!!!!!!!!!!
 	demoMode();
 	/////////////////////////////////////////////////////////////////////////////////////
-
-	for (i=1; i<=4; i++)
-	{
-		$('#mm' + i).on("drop", this, drop);
-		$('#mm' + i).on("dragover", this, allowDrop);
-
-		$('#mm' + i).attr("draggable","true");
-		$('#mm' + i).on("dragstart", this, drag);
-
-	}
 }
 
+// this will redraw the board when it gets resized (e.g 4x8, 4x10, or 4x13)
+// also reattaches event handlers when elements get re-created
 function redrawBoard()
 {
 	var i,j;
@@ -510,14 +525,29 @@ function redrawBoard()
 	$('.card').on("click", this, function(evt){ clickCard(this); });
 
 
-	for (i=0; i<52; i++)
+	for (i=1; i<=deckSize; i++)
 	{
-		$('#' + (i+1)).attr("draggable","true");
-		$('#' + (i+1)).on("dragstart", this, drag);
+		$('#' + i).attr("draggable","true");
+		$('#' + i).on("dragstart", this, drag);
 
-		$('#' + (i+1)).on("drop", this, drop);
-		$('#' + (i+1)).on("dragover", this, allowDrop);
+		$('#' + i).on("drop", this, drop);
+		$('#' + i).on("dragover", this, allowDrop);
 	}
 }
 
+// this should be called once when the page is loaded.
+function initializeGame()
+{
+	var i;
 
+	for (i=1; i<=4; i++)
+	{
+		$('#mm' + i).on("drop", this, drop);
+		$('#mm' + i).on("dragover", this, allowDrop);
+
+		$('#mm' + i).attr("draggable","true");
+		$('#mm' + i).on("dragstart", this, drag);
+
+	}
+
+}
