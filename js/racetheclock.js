@@ -79,17 +79,17 @@ function playRaceClock(evt)
 			clearInterval(raceTimer);
 //			updateMessage("Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds");
 			str = "Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
-			gameOn = false;
-
+			raceClockStarted = false;
+			
 			if (p1Turn)
 			{
-				p1Score = raceEndTime-raceStartTime;
+				p1Score = ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
 				str += "<br>Player 2's turn.";
 				initializeBoard("up",true);
 			}
 			else
 			{
-				p2Score = raceEndTime-raceStartTime;
+				p2Score = ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
 				if (p1Score < p2Score)
 				{
 					p1Total++;
@@ -104,6 +104,7 @@ function playRaceClock(evt)
 				{
 					str += "<br>The game is a tie.";
 				}
+				gameOn = false;
 			}
 			updateStatus()
 			myAlert(str);

@@ -1,8 +1,8 @@
 var $board;
-var deckSize = 40;			// number of cards total (numsuits*numInSuits)
+var deckSize = 52;			// number of cards total (numsuits*numInSuits)
 var numSuits = 4;			// number of different suits
-var numInSuits = 10;		// number of different values in each suit
-var difficulty = "easy";
+var numInSuits = 13;		// number of different values in each suit
+var difficulty = "hard";
 var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
 var game = "memory";
 var p1Score = 0;			// single game score
@@ -13,12 +13,13 @@ var p2Total = 0;			// total wins for all games
 var facedownClr = "rgb(165, 221, 227)";
 var faceupClr = "#ffffff";
 var facedownImg;
-var selectedClr = "#fcfc00";// the background color for a card that is selected
+var selectedClr = "#ffff00";// the background color for a card that is selected
 var p1Turn = true;
 var allowTies = true;		// for now this will always be true, but want to add logic to allow it to be false later
 var raceEndTime;
 var raceStartTime;
 var raceTimer;
+var raceClockStarted = false;
 var whackTimer;
 var whackInterval = 5000;	// initial time to whack in milliseconds
 var gameStart = 0;			// used for timed games to determine how long the player took
@@ -35,7 +36,7 @@ var mmSelAry = ["","","",""];			// array for storing player's picks for mastermi
 //var mmNumTries = 0;			// number of turns a player has taken so far;
 //var mmMaxTries = 10;
 var mmLength = 4;			// number of cards player has to guess in mastermind
-var cardBackAry = [ "url(/images/design1.jpg", "url(/images/design5.jpg)", "url(/images/design3.jpg)","url(/images/design4.jpg"];
+var cardBackAry = [ "url(/images/pc-back3.png)", "url(/images/pc-dean.png)", "url(/images/pc-ezra.png)","url(/images/pc-jim.png)","url(/images/pc-phil.png)"];
 
 facedownImg = cardBackAry[0];
 
@@ -122,7 +123,7 @@ function randomCompliment()
 function updateStatus()
 {
 	var str;
-	str = 'Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 win total: ' + p1Total + '<br>Player 2 win total: ' + p2Total + '<br>';
+	str = 'Player 1 score: ' + p1Score + '<br>Player 2 score: ' + p2Score + '<br>Player 1 total wins: ' + p1Total + '<br>Player 2 total wins: ' + p2Total + '<br>';
 	$('#score').html(str);
 }
 
@@ -155,13 +156,15 @@ function flipCard(idx,dir)
 
 	if (dir === "up")
 	{
-		$(evt).css({"background-image": deck[board[idx]].img})
-		$(evt).css({"background-color": faceupClr})
+		$(evt).css({"background-image": deck[board[idx]].img});
+		$(evt).css({"background-color": faceupClr});
+		deck[idx].direction = "up";
 	}
 	else
 	{
 		$(evt).css({"background-image": facedownImg});
 		$(evt).css({"background-color": facedownClr});
+		deck[idx].direction = "down";
 	}
 	return;
 }
@@ -171,16 +174,19 @@ function clickCard(evt)
 	switch (game)
 	{
 		case "memory":
+			if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
 			playMemory(evt);
 			break;
 		case "whack":
+			if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
 			checkWhackStatus(evt);
 			break;
 		case "raceclock":
+			if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
 			// game doesn't start until first card is clicked
-			if (!gameOn)
+			if (!raceClockStarted)
 			{
-				gameOn = true;
+				raceClockStarted = true;
 				gameStart = Date.now();
 				raceStartTime = new Date;
 
@@ -264,9 +270,10 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
-			$('#difficulty').attr("disabled",false)
+//			$('#difficulty').attr("disabled",false)
 			switch (difficulty)
 			{
+				case "megaeasy":
 				case "easy":
 					msg = "Select any card to start the game<br>Match any 2 cards by value to make a match<br>" + playerTurn();
 					break;
@@ -282,22 +289,22 @@ function resetGame()
 			dir = "up";
 			gameOn = true;
 			initializeMastermind();
-			$('#difficulty').val("normal");
-			$('#difficulty').attr("disabled",true)
-			difficulty = $('#difficulty').val();
+//			$('#difficulty').val("normal");
+//			$('#difficulty').attr("disabled",true)
+//			difficulty = $('#difficulty').val();
 			random = false;
-			msg = "Drag and drop 4 cards to the boxes at the bottom then click 'Guess'.  You will be told if your card is an exact match or if it partially matches based on color, value, or suit.  To change cards, drag and drop another card on top of your existing selection."
+			msg = "The computer has pre-selected 4 cards.  Drag and drop 4 cards to the boxes at the bottom then click 'Guess'.  You will be told if your card is an exact match or if it partially matches based on color, value, or suit.  To change cards, drag and drop another card on top of your existing selection."
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", false);
 			break;
 		case "raceclock":
 			msg = "Click any card to start game.  Arrange the cards by value and suit from left to right starting with the ace.  Click any two cards to swap their position.";
 			dir = "up";
-			gameOn = false;
-			$('#difficulty').val("normal");
-			$('#difficulty').attr("disabled",true)
-			difficulty = $('#difficulty').val();
-			$('#start').attr("disabled", false)
+			gameOn = true;
+//			$('#difficulty').val("normal");
+//			$('#difficulty').attr("disabled",true)
+//			difficulty = $('#difficulty').val();
+			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
 			break;
 		case "cardsearch":
@@ -305,7 +312,7 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
-			$('#difficulty').attr("disabled",false)
+//			$('#difficulty').attr("disabled",false)
 			break;
 		case "whack":
 			dir = "down";
@@ -313,9 +320,12 @@ function resetGame()
 			msg = "Click the start button to begin.  Click on cards as they turn over to score a point"
 			$('#start').attr("disabled", false)
 			$('#guess').attr("disabled", true)
-			$('#difficulty').attr("disabled",false)
+//			$('#difficulty').attr("disabled",false)
 			switch (difficulty) 
 			{
+				case "megaeasy":
+					whackInterval = 10000;
+					break;
 				case "easy":
 					whackInterval = 8000;
 					break;
@@ -345,6 +355,10 @@ function switchDifficulty(this1)
 	difficulty = this1.value;
 	switch (difficulty)
 	{
+		case "megaeasy":
+			numInSuits = 4;
+			deckSize = 16;
+			break;
 		case "easy":
 			numInSuits = 8;
 			deckSize = 32;
@@ -415,27 +429,33 @@ function initializeBoard(cardDir, random)
 	var rnd;
 	var i,j;
 	var ary = [];	// used to track which slots on board have already been filled when initializing
-
+//cardDir = "up"
 	board = [];
-	for (i=0;i<deckSize;i++)
+	for (i=0;i<52;i++)
 	{
 		ary.push(false);
 	}
+
+	j = 0;
 
 	for (i=0; i<deckSize; i++)
 	{
 		// initializes the board randomly or in order
 		if (random)
 		{
-			rnd = Math.floor((Math.random()*deckSize));
-			while (ary[rnd] == true)
+			rnd = Math.floor((Math.random()*52));
+			// this skips the cards that are not in use to make sure they are not loaded into the board
+			while ((ary[rnd] == true) ||  (deck[rnd].val > numInSuits))
 			{	
-				rnd = Math.floor((Math.random()*deckSize));
+				rnd = Math.floor((Math.random()*52));
 			}
 		}
 		else
-		{
-			rnd = i;
+		{	
+			// this is because all the cards are loaded into the deck whether or not they are used on the board
+			// this skips the cards that are not in use to make sure they are not loaded into the board
+  			while (deck[i+j].val > numInSuits) { j++; }
+			rnd = i+j;
 		}
 		ary[rnd] = true;
 		deck[rnd].boardpos = i;
@@ -462,15 +482,17 @@ function redrawBoard()
 	var str = "";
 	var cnt=1;
 
+	$('#board').html("");
 	for (i=1; i<=numSuits; i++)
 	{
 		for (j=1; j<=numInSuits; j++)
 		{
-//console.log('<div class="card" id="' + (cnt) + '"></div>');
-			str += '<div class="card" id="' + (cnt++) + '"></div>';
+			str += '<div class="card" id="' + (cnt++) + '"></div>\r';
 		}
 		str += '<div class="div-clear"></div>';
-//console.log( '<div class="div-clear"></div>');
 	}
-	$('#board').html(str);
+	$('#board').append(str);
+	$('.card').on("click", this, function(evt){ clickCard(this); });
 }
+
+

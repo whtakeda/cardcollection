@@ -13,16 +13,20 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 ## User Stories
 
 #### MVP (Ongoing)
-* [ ] As a player the game should be winnable, because the Kobayashi Maru is no fun
-  * [ ] Well-defined goal/outcome
+
 * [ ] As a player, the game interface should be visual and interactive, because Zork is so 1980s
-  * [ ] Graphical user interface
+  * [x] Graphical user interface
   * [ ] Use images and animation where appropriate
   * [ ] User should receive visual feedback on game state/status
-* [ ] As a player, I want the controls to be simple/easy-to-use
-  * [x] mouse controllable
 
 #### MVP (Completed)
+* [x] As a player the game should be winnable, because the Kobayashi Maru is no fun
+  * [x] Well-defined goal/outcome
+  * [ ] Keep score
+* [x] As a player, I want the controls to be simple/easy-to-use
+  * [x] mouse controllable
+* [x] As a player,I want the game to have replay value
+  * [x] Create multiple games - Memory, Whack-a-card, Mastermind, Race the clock
 
 #### Icebox
 
@@ -34,6 +38,8 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 * [ ] As a player the game should be winnable, because the Kobayashi Maru is no fun
   * [ ] Ties are allowed
   * [ ] Games should be scored individually, and individual wins should be scored cumulatively so players can compete against each other
+* [ ] As a player,I want the game to have replay value
+  * [ ] Create multiple games - Race the Clock
 
 ---
 

@@ -12,18 +12,19 @@ h3{
 }
 
 .card{
+
 	display:inline-block;
+    
 	width:50px;
 	height:65px;
+
 	text-align:center;
-//	background-color:#765ef5;
-	background-size: 48px 63px;
+	background-size: 50px 65px;
 	background-repeat: no-repeat;
 	background-position: center;
 	margin-top:5px;
 	border-radius:3px;
 	vertical-align:top;
-/*	background-image:url('/images/tictac-minion.png');*/
 }
 
 .titlestyle{
@@ -62,29 +63,29 @@ h3{
 }
 
 .borderimg { 
-    -webkit-border-image: url('/images/frame.jpg') round; /* Safari 3.1-5 */
-    -o-border-image: url('/images/frame.jpg') round; /* Opera 11-12.1 */
-    border-image: url('/images/frame.jpg') round;
+    -webkit-border-image: url('/images/frame3.png') round; /* Safari 3.1-5 */
+    -o-border-image: url('/images/frame3.png') round; /* Opera 11-12.1 */
+    border-image: url('/images/frame3.png') round;
     border-image-slice: 10%;
     padding:20px;
     border-width:15px;
 }
-/*
-.faceup{
-	background-color:#ffffff; 
-	background-image:"";
-}
-
-.facedown{
-	background-color:#765e65;
-	background-image:url("/images/tictac-minion.png");
-}
-*/
 
 #sidebar{
 	width:180px;
 	margin:5px;
 	vertical-align: top;
+}
+
+#mainbody{
+    position: relative;
+    display:inline-block;
+    vertical-align: middle;
+    min-width:1000px;
+    left:50%;
+    margin-left:-500px;
+    padding-top:20px;
+    text-align:center;
 }
 
 #main{
@@ -126,7 +127,7 @@ h3{
 	text-align:center;
 	line-height:50px;
 	margin-bottom:20px;
-	width:100%;
+	width:350px;
 	height:50px;
 	padding:5px;
 	border-radius:10px;
@@ -136,6 +137,8 @@ h3{
 #board{
 	display:inline-block;
 	vertical-align: middle;
+    white-space:nowrap;
+    word-spacing:0;
 }
 
 #messages{
@@ -180,7 +183,6 @@ h3{
      border-radius:20px;
      margin: 100px auto;
      background-color: #ffffff;
-//     border:1px solid #c0c0c0;
      padding:15px;
      text-align:center;
      font-size:14px;
@@ -190,74 +192,6 @@ h3{
 #modalbutton{
 	border-radius:5px;
 }
-
-/*********************************************************************************/
-
-        .panel {
-            margin: 0 auto;
-            width: 60x;
-            height: 90px;  
-            position: relative;
-            font-size: .8em;
-            -webkit-perspective: 600px;
-            -moz-perspective: 600px;
-        }
-        /* -- make sure to declare a default for every property that you want animated -- */
-        /* -- general styles, including Y axis rotation -- */
-        .panel .front {
-    background-color:#ffffff;
-            position: absolute;
-            top: 0;
-            z-index: 900;
-            width: inherit;
-            height: inherit;
-            text-align: center;
-            -webkit-transform: rotateX(0deg) rotateY(0deg);
-            -webkit-transform-style: preserve-3d;
-            -webkit-backface-visibility: hidden;
-            -moz-transform: rotateX(0deg) rotateY(0deg);
-            -moz-transform-style: preserve-3d;
-            -moz-backface-visibility: hidden;
-            /* -- transition is the magic sauce for animation -- */
-            -o-transition: all .4s ease-in-out;
-            -ms-transition: all .4s ease-in-out;
-            -moz-transition: all .4s ease-in-out;
-            -webkit-transition: all .4s ease-in-out;
-            transition: all .4s ease-in-out;
-        }
-        .panel.flip .front {
-            z-index: 900;
-            -webkit-transform: rotateY(180deg);
-            -moz-transform: rotateY(180deg);
-        }
-        .panel .back {
-      background-color:#00ff00;
-            position: absolute;
-            top: 0;
-            z-index: 800;
-            width: inherit;
-            height: inherit;
-            -webkit-transform: rotateY(-180deg);
-            -webkit-transform-style: preserve-3d;
-            -webkit-backface-visibility: hidden;
- 
-            -moz-transform: rotateY(-180deg);
-            -moz-transform-style: preserve-3d;
-            -moz-backface-visibility: hidden;
-            /* -- transition is the magic sauce for animation -- */
-            -o-transition: all .4s ease-in-out;
-            -ms-transition: all .4s ease-in-out;
-            -moz-transition: all .4s ease-in-out;
-            -webkit-transition: all .4s ease-in-out;
-            transition: all .4s ease-in-out;
-        }
-        .panel.flip .back {
-            z-index: 1000;
-            -webkit-transform: rotateX(0deg) rotateY(0deg);
-            -moz-transform: rotateX(0deg) rotateY(0deg);
-        }
-
-
 
 /*************************************************************************************/
 

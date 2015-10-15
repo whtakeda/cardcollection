@@ -4,6 +4,7 @@ function isWinnerMemory()
 
 	switch (difficulty)
 	{
+		case "megaeasy":
 		case "easy":
 		case "normal":
 			if (p1Score + p2Score == deckSize/2)
@@ -47,10 +48,10 @@ function isWinnerMemory()
 			break;
 	}
 }
-
+var evt1
 function playMemory(evt)
 {
-	
+	evt1 =evt;
 	var idx,idx2;
 	var evt2;
 	var card1, card2;
@@ -58,6 +59,8 @@ function playMemory(evt)
 	var winner;
 	var condition;
 	var str;
+
+	if (deck[$(evt).attr("id")-1].direction === "up") { return; }
 
 	idx = $(evt).attr("id")-1;
 	// just capture the first click
@@ -82,17 +85,18 @@ function playMemory(evt)
 		idx2 = selAry.pop()
 		card2 = deck[board[idx2]];
 
-		if (difficulty === "easy")
+		switch (difficulty)
 		{
-			condition = (card1.val === card2.val) && (idx != idx2);
-		}
-		else if (difficulty == "normal")
-		{
-			condition = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
-		}
-		else if (difficulty == "hard")
-		{
-			condition = (card1.val === card2.val) && (idx != idx2);
+			case "megaeasy":
+			case "easy":
+				condition = (card1.val === card2.val) && (idx != idx2);
+				break;
+			case "normal":
+				condition = (card1.val === card2.val) && (card1.clr === card2.clr) && (idx != idx2);
+				break;
+			case "hard":
+				condition = (card1.val === card2.val) && (idx != idx2);
+				break;
 		}
 
 		if (condition)

@@ -24,7 +24,6 @@ function endWhack()
 
 	flipCard(idx,"down");
 	updateMessage("Time's up!");
-	gameOn = false;
 
 	if (p1Turn)
 	{
@@ -46,6 +45,7 @@ function endWhack()
 		{
 			str = "Time's up.  The game is a tie.";
 		}
+		gameOn = false;
 	}
 	p1Turn = !p1Turn;
 //	updateMessage(str);
