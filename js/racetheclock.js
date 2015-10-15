@@ -6,13 +6,11 @@ function isWinnerRaceClock()
 	{
 		for (j=0; j<numInSuits; j++)
 		{
-//			if (board[i*numInSuits+j].val-1 != j)
 			if (deck[board[i*numInSuits+j]].val-1 != j)
 			{
-				console.log("failed at position " + (i*numInSuits+j))
+//				console.log("failed at position " + (i*numInSuits+j))
 				return false;
 			}
-//			else if (j>0 && board[i*numInSuits+j].suit != board[i*numInSuits+j-1].suit)
 			else if (j>0 && deck[board[i*numInSuits+j]].suit != deck[board[i*numInSuits+j-1]].suit)
 			{
 				console.log("failed at position " + (i*numInSuits+j))
@@ -23,7 +21,71 @@ function isWinnerRaceClock()
 	return true;
 }
 
-function playRaceClock(evt)
+function playRaceClock(evtSrc, evtDest)
+{
+	var card1, card2;
+	var evt1, evt2;
+	var pos1,pos2;
+	var idx1, idx2;
+
+	// swap the background image of the divs, the innerhtml of the divs (if demo mode is on)
+	temp = deck[board[evtDest]].img;
+	$('#' + (evtDest+1)).css("background-image", deck[board[evtSrc]].img);
+	$('#' + (evtSrc+1)).css("background-image", temp);			temp = $('#' + (evtDest+1)).html();
+	$('#' + (evtDest+1)).html($('#' + (evtSrc+1)).html());
+	$('#' + (evtSrc+1)).html(temp);
+	temp = $('#' + (evtDest+1)).css("color");
+	$('#' + (evtDest+1)).css("color", $('#' + (evtSrc+1)).css("color"));
+	$('#' + (evtSrc+1)).css("color",temp);
+	// alsos swap the positions of the cards in the board array and the boardpos in the deck array
+	temp = board[evtDest];
+	board[evtDest] = board[evtSrc];
+	board[evtSrc] = temp;
+	temp = deck[board[evtDest]].boardpos;
+	deck[board[evtDest]].boardpos = deck[board[evtSrc]].boardpos;
+	deck[board[evtSrc]].boardpos = temp;
+
+	if (isWinnerRaceClock())
+	{
+		gameEnd = Date.now();
+			clearInterval(raceTimer);
+//		updateMessage("Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds");
+		str = "Completed in " + ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
+		raceClockStarted = false;
+		ignoreDrop = false;
+			
+		if (p1Turn)
+		{
+			p1Score = ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
+			str += "<br>Player 2's turn.";
+			initializeBoard("up",true);
+		}
+		else
+		{
+			p2Score = ((raceEndTime - raceStartTime)/1000).toFixed(1) + " seconds";
+			if (p1Score < p2Score)
+			{
+				p1Total++;
+				str += "<br>Player 1 is the winner";
+			}
+			else if (p2Score < p1Score)
+			{
+				p2Total++;
+				str += "<br>Player 2 is the winner";
+			}
+			else
+			{
+				str += "<br>The game is a tie.";
+			}
+			gameOn = false;
+		}
+		updateStatus()
+		myAlert(str);
+		p1Turn = !p1Turn;
+	}
+}
+
+function playRaceClockClick(evt)
 {
 //	var card1, card2;
 //	var evt1, evt2;

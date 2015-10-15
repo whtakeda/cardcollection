@@ -25,6 +25,7 @@ var whackInterval = 5000;	// initial time to whack in milliseconds
 var gameStart = 0;			// used for timed games to determine how long the player took
 var gameEnd = 0;			// used for timed games to determine how long the player took
 var gameOn = false;
+var ignoreDrop = false;		// see comments in drop() function
 var deck = [];				// array for storing cards
 var board = [];				// array for modeling game board
 var player1 = "Player 1";
@@ -182,20 +183,21 @@ function clickCard(evt)
 			checkWhackStatus(evt);
 			break;
 		case "raceclock":
-			if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
-			// game doesn't start until first card is clicked
-			if (!raceClockStarted)
-			{
-				raceClockStarted = true;
-				gameStart = Date.now();
-				raceStartTime = new Date;
+			// if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
+			// // game doesn't start until first card is clicked
+			// if (!raceClockStarted)
+			// {
+			// 	raceClockStarted = true;
+			// 	gameStart = Date.now();
+			// 	raceStartTime = new Date;
 
-				raceTimer = setInterval(function() {
-							raceEndTime = new Date;
-    						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
-							}, 100);
-			}
-			playRaceClock(evt);
+			// 	raceTimer = setInterval(function() {
+			// 				raceEndTime = new Date;
+   //  						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
+			// 				}, 100);
+			// }
+			// console.log(evt)
+			// playRaceClock(evt);
 			break;
 		case "mastermind":
 			break;
@@ -209,41 +211,61 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-
-	if (game != "mastermind") { return; }
+//	if (game != "mastermind") { return; }
     ev.originalEvent.dataTransfer.setData("text", ev.target.id);
 }
-
-
+var dropcnt=1;
 function drop(ev) {
 	var crd;
 	ev.preventDefault();
     var data = ev.originalEvent.dataTransfer.getData("text");
+	var filled = false;
+	var evt = $('#'+data);	
+	var evt1, evt2;
+//	var temp1, evtDest;
 //    ev.target.appendChild(document.getElementById(data));
 
+//console.log(ev)
+//console.log(ev.data.target)
 	// space is already filled, then switch cards
 	// if space is not filled, make sure card is not already selected and disallow if it is
 	// otherwise just drop it in
 
-	var filled = false;
-	var evt = $('#'+data);	
-	if (filled)
-	{
-
-	}
-	else
+	if (game === "mastermind")
 	{
 		if (playMastermind(evt.attr("id")-1,ev.target.id[2]-1))
 		{
 			ev.target.style.backgroundImage = document.getElementById(data).style.backgroundImage;
 			ev.target.style.backgroundColor = document.getElementById(data).style.backgroundColor;
 		}
-		else
-		{
-//			alert("you already selected that card");
-		}
 	}
+	else if (game === "raceclock")
+	{	
+		if (!gameOn) { myAlert("Hey click the reset button if you want to play again!"); return; }
 
+		// game doesn't start until first card is clicked
+		if (!raceClockStarted)
+		{
+			raceClockStarted = true;
+			gameStart = Date.now();
+			raceStartTime = new Date;
+
+			raceTimer = setInterval(function() {
+						raceEndTime = new Date;
+   						$('#timer').text(((raceEndTime - raceStartTime)/1000).toFixed(1) + " Seconds");
+						}, 100);
+		}
+console.log(dropcnt++)
+		// this drop fires twice, once for each element being exchanged.  so each pair of event fires is a single transaction and we want to ignore the second one
+		if (!ignoreDrop)
+		{
+			evtSrc = evt.attr("id")-1; 
+			evtDest = ev.target.id-1;
+
+			playRaceClock(evtSrc, evtDest);
+		}
+		ignoreDrop = !ignoreDrop;
+	}
 }
 
 function resetGame()
@@ -270,7 +292,6 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
-//			$('#difficulty').attr("disabled",false)
 			switch (difficulty)
 			{
 				case "megaeasy":
@@ -289,9 +310,6 @@ function resetGame()
 			dir = "up";
 			gameOn = true;
 			initializeMastermind();
-//			$('#difficulty').val("normal");
-//			$('#difficulty').attr("disabled",true)
-//			difficulty = $('#difficulty').val();
 			random = false;
 			msg = "The computer has pre-selected 4 cards.  Drag and drop 4 cards to the boxes at the bottom then click 'Guess'.  You will be told if your card is an exact match or if it partially matches based on color, value, or suit.  To change cards, drag and drop another card on top of your existing selection."
 			$('#start').attr("disabled", true)
@@ -301,9 +319,6 @@ function resetGame()
 			msg = "Click any card to start game.  Arrange the cards by value and suit from left to right starting with the ace.  Click any two cards to swap their position.";
 			dir = "up";
 			gameOn = true;
-//			$('#difficulty').val("normal");
-//			$('#difficulty').attr("disabled",true)
-//			difficulty = $('#difficulty').val();
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
 			break;
@@ -312,7 +327,6 @@ function resetGame()
 			gameOn = true;
 			$('#start').attr("disabled", true)
 			$('#guess').attr("disabled", true)
-//			$('#difficulty').attr("disabled",false)
 			break;
 		case "whack":
 			dir = "down";
@@ -320,7 +334,6 @@ function resetGame()
 			msg = "Click the start button to begin.  Click on cards as they turn over to score a point"
 			$('#start').attr("disabled", false)
 			$('#guess').attr("disabled", true)
-//			$('#difficulty').attr("disabled",false)
 			switch (difficulty) 
 			{
 				case "megaeasy":
@@ -461,8 +474,6 @@ function initializeBoard(cardDir, random)
 		deck[rnd].boardpos = i;
 		board.push(rnd);
 		flipCard(i, cardDir);
-		$('#' + (i+1)).attr("draggable","true");
-		$('#' + (i+1)).on("dragstart", this, drag);
 
 	}
 	// PULL THIS LINE OUT LATER.  ONLY LEAVE IT HERE FOR DEBUGGING RIGHT NOW!!!!!!!!!!!!!!!!!!!
@@ -473,6 +484,10 @@ function initializeBoard(cardDir, random)
 	{
 		$('#mm' + i).on("drop", this, drop);
 		$('#mm' + i).on("dragover", this, allowDrop);
+
+		$('#mm' + i).attr("draggable","true");
+		$('#mm' + i).on("dragstart", this, drag);
+
 	}
 }
 
@@ -493,6 +508,16 @@ function redrawBoard()
 	}
 	$('#board').append(str);
 	$('.card').on("click", this, function(evt){ clickCard(this); });
+
+
+	for (i=0; i<52; i++)
+	{
+		$('#' + (i+1)).attr("draggable","true");
+		$('#' + (i+1)).on("dragstart", this, drag);
+
+		$('#' + (i+1)).on("drop", this, drop);
+		$('#' + (i+1)).on("dragover", this, allowDrop);
+	}
 }
 
 
