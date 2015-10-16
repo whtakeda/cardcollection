@@ -68,9 +68,9 @@ h3{
 }
 
 .borderimg { 
-    -webkit-border-image: url('../../images/myAlert.png') round; /* Safari 3.1-5 */
-    -o-border-image: url('../../images/myAlert.png') round; /* Opera 11-12.1 */
-    border-image: url('../../images/myAlert.png') round;
+    -webkit-border-image: url('../images/myAlert.png') round; /* Safari 3.1-5 */
+    -o-border-image: url('../images/myAlert.png') round; /* Opera 11-12.1 */
+    border-image: url('../images/myAlert.png') round;
     border-image-slice: 10%;
     padding:20px;
     border-width:15px;
@@ -166,7 +166,7 @@ h3{
 	padding:10px;
 	border-radius:10px;
 	vertical-align: top;
-	font-size:0.9em;
+	font-size:0.8em;
 	font-family:Arial,sans-serif;
 }
 
