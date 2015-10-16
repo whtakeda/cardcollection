@@ -78,3 +78,4 @@ Next, the necessary data was identified (data types) and actions on the data wer
 * Add animation for "flipping" card over
 * Add support for mobile devices
 * Improve styling of GUI
+* Create a nice logo and come up with a better name
