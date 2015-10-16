@@ -19,7 +19,7 @@ var deck = [];				// array for storing cards
 var board = [];				// array for modeling game board
 var complimentAry = ["Good job!", "You're doing great!", "Meh.", "Way to go!", "Awwww yeahhhhhhhhhh!"]
 var selAry = []; 			// push any cards that have been selected onto this stack so you can track them to turn them back over if needed
-var cardBackAry = [ "url(../images/pc-default.png)", "url(../images/pc-dean.png)", "url(../images/pc-ezra.png)","url(../images/pc-jim.png)","url(../images/pc-phil.png)"];
+var cardBackAry = [ "url(images/pc-default.png)", "url(images/pc-dean.png)", "url(images/pc-ezra.png)","url(images/pc-jim.png)","url(images/pc-phil.png)"];
 
 /********* game-specific variables *********/
 
@@ -64,7 +64,7 @@ var card = function(name,suit,value,color,deckpos,direction)
 	this.clr = color;
 	this.deckpos = deckpos; 		// position in deck array
 	this.boardpos = 0;				// position on board; always 0 to start; gets set when board is initialized
-	this.img = "url(../images/" + suit + "-" + name + ".png)"
+	this.img = "url(images/" + suit + "-" + name + ".png)"
 	this.direction = direction		// down or up (facedown or faceup) - currently not used.  keep here for now b/c might be using it later
 }
 
