@@ -114,8 +114,10 @@ function clearMMBoard()
 
 	for (i=1; i<=4; i++)
 	{
-		$('#mm'+i).css("backgroundImage","");
-		$('#mm'+i).css("backgroundColor", "#000000")
+//		$('#mm'+i).css("backgroundImage","");
+//		$('#mm'+i).css("backgroundColor", "#000000");
+		changeBgImage('#mm'+i,"");
+		changeBgColor('#mm'+i,"#000000");
 	}
 }
 

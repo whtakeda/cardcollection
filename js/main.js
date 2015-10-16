@@ -108,7 +108,7 @@ function changeDeckDesign()
 	{
 		if ($('#' + i).css("background-color") === facedownClr)
 		{
-			$('#' + i).css("background-image", facedownImg);
+			changeBgIimage('#' + i,facedownImg)
 		}
 	}
 }
@@ -119,6 +119,17 @@ function randomCompliment()
 
 	rnd = Math.floor(Math.random()*5);
 	return complimentAry[rnd];
+}
+
+function changeBgColor(elId,clr)
+{
+	console.log(clr)
+	$(elId).css("background-color",clr);
+}
+
+function changeBgImage(elId,img)
+{
+	$(elId).css("background-image",img);
 }
 
 function updateStatus()
@@ -197,14 +208,18 @@ function flipCard(idx,dir)
 
 	if (dir === "up")
 	{
-		$(evt).css({"background-image": deck[board[idx]].img});
-		$(evt).css({"background-color": faceupClr});
+//		$(evt).css({"background-image": deck[board[idx]].img});
+//		$(evt).css({"background-color": faceupClr});
+		changeBgImage(evt,deck[board[idx]].img);
+		changeBgColor(evt,faceupClr);
 		deck[idx].direction = "up";
 	}
 	else
 	{
-		$(evt).css({"background-image": facedownImg});
-		$(evt).css({"background-color": facedownClr});
+//		$(evt).css({"background-image": facedownImg});
+//		$(evt).css({"background-color": facedownClr});
+		changeBgImage(evt,facedownImg);
+		changeBgColor(evt,facedownClr);
 		deck[idx].direction = "down";
 	}
 	return;
@@ -496,7 +511,7 @@ function randomizeBoard(cardDir, random)
 
 	}
 	// PULL THIS LINE OUT LATER.  ONLY LEAVE IT HERE FOR DEBUGGING RIGHT NOW!!!!!!!!!!!!!!!!!!!
-	demoMode();
+//	demoMode();
 	/////////////////////////////////////////////////////////////////////////////////////
 }
 

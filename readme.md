@@ -1,6 +1,6 @@
-# Card Collection
+# Card Collection Challenge
 
-Card collection is a suite of card games based on a standard deck of cards.  The games include (in current or future releases)
+Card Collection Chalenge is a suite of card games based on a standard deck of cards.  The games include (in current or future releases)
 
 1. Concentration/Memory
 2. Whack-a-Card
@@ -23,7 +23,7 @@ Card collection is a suite of card games based on a standard deck of cards.  The
   * [x] drag-and-drop for Mastermind and Race the Clock
 * [x] As a player,I want the game to have replay value
   * [x] Create multiple games - Memory, Whack-a-card, Mastermind, Race the clock
-* [ ] As a player, the game interface should be visual and interactive, because Zork is so 1980s
+* [x] As a player, the game interface should be visual and interactive, because Zork is so 1980s
   * [x] Graphical user interface
   * [x] Use images and animation where appropriate
   * [x] User should receive visual feedback on game state/status
@@ -65,7 +65,10 @@ Next, the necessary data was identified (data types) and actions on the data wer
 ---
 
 ## Known Bugs/issues
+
 * GUI does not scale well.  Requires nearly a full screen to display correctly.  Basically unplayable on mobile devices
+* Possible bug in Mastermind that may allow the same card to be selected twice, making the game unwinnable
+
 ---
 
 ## Next Steps
@@ -73,4 +76,5 @@ Next, the necessary data was identified (data types) and actions on the data wer
 * Improve status/message feedback in games.
 * More detailed instructions
 * Add animation for "flipping" card over
-* Add support for mobile device
+* Add support for mobile devices
+* Improve styling of GUI

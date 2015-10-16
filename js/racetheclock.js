@@ -28,14 +28,15 @@ function playRaceClock(evtSrc, evtDest)
 	var temp;
 
 	// swap the background image and innerhtml of the divs (if demo mode is on)
+
 	temp = deck[board[evtDest]].img;
-	$('#' + (evtDest+1)).css("background-image", deck[board[evtSrc]].img);
-	$('#' + (evtSrc+1)).css("background-image", temp);			temp = $('#' + (evtDest+1)).html();
+	changeBgImage('#' + (evtDest+1),deck[board[evtSrc]].img);
+	changeBgImage('#' + (evtSrc+1),temp);
+
+	temp = $('#' + (evtDest+1)).html();
 	$('#' + (evtDest+1)).html($('#' + (evtSrc+1)).html());
 	$('#' + (evtSrc+1)).html(temp);
-	temp = $('#' + (evtDest+1)).css("color");
-	$('#' + (evtDest+1)).css("color", $('#' + (evtSrc+1)).css("color"));
-	$('#' + (evtSrc+1)).css("color",temp);
+	
 	// alsos swap the positions of the cards in the board array and the boardpos in the deck array
 	temp = board[evtDest];
 	board[evtDest] = board[evtSrc];

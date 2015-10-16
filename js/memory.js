@@ -33,7 +33,8 @@ function playMemory(evt)
 		flipCard(idx1,"up");
 
 		// highlight card somehow so player can see which card is selected - change this later
-		$(evt).css("background-color",selectedClr);
+//		$(evt).css("background-color",selectedClr);
+		changeBgColor(evt,selectedClr);
 
 		selAry.push(idx1);
 	}
@@ -69,13 +70,16 @@ function playMemory(evt)
 			// so then we have a total of 4 matching cards (2 on the ary and the current and previous selections)
 			if (difficulty === "hard" && selAry.length < 2)
 			{
-				$('#' + (idx2+1)).css("background-color","#ffffff");
-				$('#' + (idx1+1)).css("background-color",selectedClr);
+//				$('#' + (idx2+1)).css("background-color","#ffffff");
+//				$('#' + (idx1+1)).css("background-color",selectedClr);
+				changeBgColor('#' + (idx2+1),"#ffffff");
+				changeBgColor('#' + (idx1+1),selectedClr)
 				selAry.push(idx2);
 				selAry.push(idx1);
 				return;
 			}
-			$('#' + (idx2+1)).css("background-color","#ffffff");
+//			$('#' + (idx2+1)).css("background-color","#ffffff");
+			changeBgColor('#' + (idx2+1),"#ffffff");
 
 			rnd = Math.floor(Math.random()*5)
 			updateMessage('You found a match!<br>' + randomCompliment());
