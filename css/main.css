@@ -70,7 +70,7 @@ h3{
 .borderimg { 
     -webkit-border-image: url('../../images/myAlert.png') round; /* Safari 3.1-5 */
     -o-border-image: url('../../images/myAlert.png') round; /* Opera 11-12.1 */
-    border-image: url('../../images/myAlert.png') round;
+    border-image: url('../images/myAlert.png') round;
     border-image-slice: 10%;
     padding:20px;
     border-width:15px;
