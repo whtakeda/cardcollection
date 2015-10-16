@@ -14,7 +14,6 @@ Card collection is a suite of card games based on a standard deck of cards.  The
 
 #### MVP (Ongoing)
 
-
 #### MVP (Completed)
 * [x] As a player the game should be winnable, because the Kobayashi Maru is no fun
   * [x] Well-defined goal/outcome
@@ -74,4 +73,4 @@ Next, the necessary data was identified (data types) and actions on the data wer
 * Improve status/message feedback in games.
 * More detailed instructions
 * Add animation for "flipping" card over
-* Add support for mobile devices
+* Add support for mobile device
